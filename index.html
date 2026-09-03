@@ -1236,13 +1236,18 @@ window.fbSync = {
     window.__REVIEW_SEEDED__ = true;   // このあと本体の正規化を通す目印
   }
   window.__reviewReseed = function(){
+    var loggedIn = (typeof currentUser!=="undefined") && !!currentUser;
     if(!confirm("お試し版のデータを最初のダミーデータに戻します。\n"
-      + "この画面で入力・変更した内容は消えます。\n"
-      + "（ログイン中の場合、そのあとクラウドにも反映されます）\n\nよろしいですか？")) return;
+      + "この画面で入力・変更した内容は消えます。"
+      + (loggedIn ? "\nログイン中なので、クラウド側（スマホなど）も同じように戻ります。" : "")
+      + "\n\nよろしいですか？")) return;
     try{
       Object.keys(localStorage).filter(function(k){ return k.indexOf("review_kyoumu")===0; })
         .forEach(function(k){ localStorage.removeItem(k); });
       seedNow();
+      // ログイン中に押したときだけ、次のログイン照合でクラウドを上書きしてよい目印を残す。
+      // （ログアウト中に残すと、あとで別アカウントにログインしたときに事故になる）
+      if(loggedIn) localStorage.setItem("review_kyoumu_techou_forcepush", "1");
     }catch(e){ alert("戻せませんでした：\n"+(e.message||e)); return; }
     location.reload();
   };
@@ -1538,9 +1543,18 @@ async function trySyncUser(user){
     if(remote && !isDbEmpty(remote.json) && !isDbEmpty(DB)){
       // お試し版：ダミーデータで本物の手帳を上書きしてしまわないための安全策。
       // クラウド側にデータがあるアカウントでは、必ずクラウドの内容を読み込む。
-      alert("このアカウントにはすでに手帳のデータがあります。\n"+
-            "お試し版のダミーデータで上書きはせず、そちらを読み込みます。");
-      const useCloud = true;
+      // ただし「ダミーに戻す」をログイン中に押した直後だけは、本人の意思なので
+      // この端末のダミーでクラウドを上書きする（目印は1回使ったら消す）。
+      let reviewForce = false;
+      try{
+        reviewForce = localStorage.getItem("review_kyoumu_techou_forcepush")==="1";
+        if(reviewForce) localStorage.removeItem("review_kyoumu_techou_forcepush");
+      }catch(e){}
+      if(!reviewForce){
+        alert("このアカウントにはすでに手帳のデータがあります。\n"+
+              "お試し版のダミーデータで上書きはせず、そちらを読み込みます。");
+      }
+      const useCloud = !reviewForce;
       if(useCloud){
         applyRemoteDB(remote.json);
         lastKnownRemoteUpdatedAt = remote.updatedAt;
