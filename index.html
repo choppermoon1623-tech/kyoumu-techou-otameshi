@@ -9,13 +9,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#faf8f3; --panel:#fffdf9; --ink:#24211c; --ink2:#4a4335;
-  --sub:#8d8578; --faint:#a49b8b; --ghost:#c2b9a7;
-  --line:#e6e0d4; --line2:#eee9dd; --wash:#f4f0e7; --wash2:#f7f4ed;
-  --accent:#b03a2e; --accentWash:#fdf3ee; --accentLine:#f0d6c9;
-  --btn:#2b2721; --btnHover:#413a30;
-  --ok:#7f9a7f; --task:#7a4a9c; --taskWash:#f4edfc;
-  --serif:'Zen Old Mincho',serif;
+  --paper:#f1ece0; --panel:#fffdf7; --ink:#1e1b15; --ink2:#433d31;
+  --sub:#6e6659; --faint:#928a7a; --ghost:#bdb5a4;
+  --line:#ded6c4; --line2:#ece5d6; --wash:#efe9db; --wash2:#faf6ec;
+  --accent:#a8342a; --accentWash:#fbf1ec; --accentLine:#ecd3c6;
+  --gold:#9c7c3c; --goldWash:#f8f2e3; --goldLine:#e0d0ab;
+  --btn:#26221b; --btnHover:#3c3529;
+  --ok:#5f7a5f; --task:#6b4090; --taskWash:#f2ecfa;
+  --serif:'Zen Old Mincho',"Yu Mincho",serif;
   --sans:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN',sans-serif;
 }
 *{box-sizing:border-box;}
@@ -24,178 +25,210 @@ body{margin:0;font-family:var(--sans);background:var(--paper);color:var(--ink);
   display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased;}
 h1,h2,h3{margin:0;}
 a{color:var(--accent);text-decoration:none;} a:hover{color:#8d2c22;text-decoration:underline;}
-::selection{background:#f0d9c8;}
+::selection{background:#efd9c6;}
 
-button{font-family:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;
-  border-radius:9px;padding:0 13px;height:34px;color:#57503f;font-size:12.5px;transition:border-color .12s,background .12s;}
-button:hover{border-color:#cfc5b1;}
-button.primary{background:var(--btn);color:#f8f3e9;border-color:var(--btn);font-weight:500;}
-button.primary:hover{background:var(--btnHover);border-color:var(--btnHover);}
-button.icon{width:32px;height:32px;padding:0;border:none;background:transparent;border-radius:9px;font-size:13px;}
-button.icon:hover{background:#f1ece1;}
+/* 線画アイコン（絵文字の置き換え）。色は親のcolorを継ぐ */
+.ico{width:16px;height:16px;flex:none;display:block;fill:none;stroke:currentColor;
+  stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;}
+.ico.sm{width:13px;height:13px;}
+.ico.lg{width:19px;height:19px;}
+
+button{font-family:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);
+  border-radius:8px;padding:0 13px;height:34px;color:var(--sub);font-size:12.5px;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  transition:border-color .12s,background .12s,color .12s;}
+button:hover{border-color:#cdc3ad;color:var(--ink2);}
+button.primary{background:var(--btn);color:#f6efe1;border-color:var(--btn);font-weight:500;
+  box-shadow:0 1px 2px rgba(38,34,27,.18);}
+button.primary:hover{background:var(--btnHover);border-color:var(--btnHover);color:#f6efe1;}
+button.icon{width:34px;height:34px;padding:0;border:none;background:transparent;border-radius:9px;font-size:13px;}
+button.icon:hover{background:var(--wash);}
 button:disabled{opacity:.35;cursor:default;}
 input,select,textarea{font-family:inherit;border:1px solid var(--line);border-radius:8px;
   padding:6px 9px;color:var(--ink);background:#fff;font-size:12.5px;}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--faint);}
-textarea{resize:vertical;line-height:1.6;}
-.small{font-size:11.5px;color:var(--sub);}
-.hint{font-size:11px;color:var(--faint);line-height:1.6;}
+textarea{resize:vertical;line-height:1.7;}
+.small{font-size:12px;color:var(--sub);}
+.hint{font-size:11.5px;color:var(--faint);line-height:1.7;}
 
 /* ---------- topbar ---------- */
 .topbar{flex:none;z-index:30;background:var(--panel);border-bottom:1px solid var(--line);
-  display:flex;align-items:center;gap:12px;padding:0 18px;min-height:60px;flex-wrap:wrap;}
-.brand{display:flex;align-items:center;gap:10px;flex:none;}
-.brand .mark{width:28px;height:28px;border-radius:7px;background:var(--btn);color:#f6efe2;
-  font-family:var(--serif);font-size:15px;display:flex;align-items:center;justify-content:center;}
-.brand .ttl{font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:.05em;white-space:nowrap;}
-.syncBtn{height:26px;padding:0 11px;border-radius:999px;font-size:11.5px;font-weight:500;
-  background:var(--wash);border:1px solid var(--line);color:#57503f;
-  display:flex;align-items:center;gap:5px;flex:none;white-space:nowrap;}
-.syncBtn:hover{border-color:#cfc5b1;background:#efe9dd;}
+  display:flex;align-items:center;gap:12px;padding:0 18px;min-height:64px;flex-wrap:wrap;
+  box-shadow:0 1px 0 rgba(60,52,38,.03);}
+.brand{display:flex;align-items:center;gap:11px;flex:none;}
+.brand .mark{width:30px;height:30px;border-radius:8px;background:var(--btn);color:#f4ecdb;
+  font-family:var(--serif);font-size:16px;display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+.brand .ttl{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:.10em;white-space:nowrap;}
+.syncBtn{height:28px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:500;
+  background:var(--wash2);border:1px solid var(--line);color:var(--sub);
+  display:flex;align-items:center;gap:6px;flex:none;white-space:nowrap;}
+.syncBtn:hover{border-color:#cdc3ad;background:var(--wash);}
 .syncBtnLabel{max-width:160px;overflow:hidden;text-overflow:ellipsis;}
-.tbdiv{width:1px;height:22px;background:var(--line);flex:none;}
-.teacherBox{display:flex;align-items:center;gap:7px;flex:none;}
-.teacherBox select{border:none;background:var(--wash);border-radius:999px;height:30px;padding:0 8px;font-weight:500;max-width:150px;}
+.tbdiv{width:1px;height:24px;background:var(--line2);flex:none;}
+.teacherBox{display:flex;align-items:center;gap:8px;flex:none;}
+.teacherBox .small{font-size:11px;color:var(--faint);letter-spacing:.08em;}
+.teacherBox select{border:1px solid var(--line);background:var(--wash2);border-radius:999px;
+  height:30px;padding:0 10px;font-weight:500;max-width:150px;color:var(--ink2);}
 .grow{flex:1;}
-.weeknav{display:flex;align-items:center;gap:2px;flex:none;}
-.weeknav .wk{font-family:var(--serif);font-size:14px;font-weight:700;min-width:250px;text-align:center;line-height:1.3;}
-.searchWrap{display:flex;align-items:center;gap:7px;height:32px;padding:0 11px;border-radius:9px;background:var(--wash);flex:none;}
-.searchWrap .mag{color:var(--faint);font-size:12px;}
-.searchWrap input{border:none;background:transparent;padding:0;width:150px;}
+.lblS{display:none;}
+.weeknav{display:flex;align-items:center;gap:4px;flex:none;}
+.weeknav .wk{font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:.04em;
+  min-width:250px;text-align:center;line-height:1.35;font-variant-numeric:tabular-nums;}
+.searchWrap{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:9px;
+  background:var(--wash2);border:1px solid var(--line);flex:none;}
+.searchWrap .mag{color:var(--faint);display:flex;}
+.searchWrap input{border:none;background:transparent;padding:0;width:150px;font-size:12.5px;}
 .searchWrap input::placeholder{color:var(--faint);}
 .tbicons{display:flex;align-items:center;gap:2px;flex:none;}
 .menuWrap{position:relative;}
-.menu{display:none;position:absolute;top:38px;right:0;min-width:190px;background:var(--panel);
-  border:1px solid var(--line);border-radius:11px;box-shadow:0 16px 34px -18px rgba(48,40,28,.5);padding:6px;z-index:40;}
+.menu{display:none;position:absolute;top:40px;right:0;min-width:206px;background:var(--panel);
+  border:1px solid var(--line);border-radius:11px;box-shadow:0 18px 36px -20px rgba(48,40,28,.5);padding:6px;z-index:40;}
 .menu.open{display:flex;flex-direction:column;gap:2px;}
 .menu button,.menu a{border:none;background:transparent;text-align:left;height:36px;padding:0 10px;border-radius:8px;width:100%;
-  display:flex;align-items:center;box-sizing:border-box;color:#57503f;text-decoration:none;font-size:12.5px;}
-.menu button:hover,.menu a:hover{background:var(--wash);}
+  display:flex;align-items:center;gap:9px;justify-content:flex-start;box-sizing:border-box;
+  color:var(--sub);text-decoration:none;font-size:12.5px;}
+.menu button:hover,.menu a:hover{background:var(--wash2);color:var(--ink2);}
 .menu button.danger{color:var(--accent);}
-.menu button.danger:hover{background:var(--accentWash);}
+.menu button.danger:hover{background:var(--accentWash);color:var(--accent);}
 .menuDiv{height:1px;background:var(--line2);margin:4px 2px;}
 .syncDot{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ok);flex:none;}
 .syncDot i{width:6px;height:6px;border-radius:50%;background:currentColor;}
 
 /* ---------- layout ---------- */
 .layout{display:flex;align-items:stretch;flex:1;min-height:0;overflow:hidden;}
-.sidebar{width:228px;flex:none;border-right:1px solid var(--line);background:var(--wash2);
+.sidebar{width:240px;flex:none;border-right:1px solid var(--line);background:var(--wash2);
   display:flex;flex-direction:column;min-height:0;}
-.sidebarHead{flex:none;padding:16px 16px 8px;}
-.sidebarHead h3{font-family:var(--serif);font-size:13px;font-weight:700;letter-spacing:.1em;color:#4a4335;}
-#weekList{flex:1;overflow-y:auto;padding:4px 10px;}
+.sidebarHead{flex:none;padding:18px 18px 10px;}
+.sidebarHead h3{font-family:var(--serif);font-size:12.5px;font-weight:700;letter-spacing:.22em;color:var(--ink2);}
+#weekList{flex:1;overflow-y:auto;padding:4px 12px;}
 .yearGroup{margin-bottom:4px;}
-.yearHead{width:100%;border:none;background:transparent;display:flex;align-items:center;gap:6px;
-  padding:8px 6px;border-radius:8px;font-size:12px;font-weight:700;color:#57503f;text-align:left;}
-.yearHead:hover{background:#efe9dd;}
+.yearHead{width:100%;border:none;background:transparent;display:flex;align-items:center;gap:7px;
+  padding:9px 8px;border-radius:8px;font-size:12px;font-weight:700;color:var(--ink2);text-align:left;
+  height:auto;justify-content:flex-start;}
+.yearHead:hover{background:var(--wash);}
 .yearArrow{color:var(--faint);font-size:10px;width:10px;flex:none;}
 .yearLabel{flex:1;}
-.yearCount{color:var(--faint);font-weight:400;font-size:10.5px;}
+.yearCount{color:var(--faint);font-weight:400;font-size:10.5px;font-variant-numeric:tabular-nums;}
 .yearBody{padding-left:2px;}
-.weekItem{position:relative;padding:9px 26px 9px 10px;border-radius:8px;font-size:12.5px;cursor:pointer;
-  margin-bottom:2px;line-height:1.45;color:#57503f;border-left:2px solid transparent;}
-.weekItem:hover{background:#efe9dd;}
-.weekItem.cur{background:var(--panel);box-shadow:0 1px 0 rgba(60,52,38,.06),0 0 0 1px #e0d7c4;
+.weekItem{position:relative;padding:10px 26px 10px 12px;border-radius:8px;font-size:12.5px;cursor:pointer;
+  margin-bottom:3px;line-height:1.45;color:var(--ink2);border-left:2px solid transparent;
+  font-variant-numeric:tabular-nums;}
+.weekItem:hover{background:var(--wash);}
+.weekItem.cur{background:var(--panel);box-shadow:0 1px 2px rgba(60,52,38,.06),0 0 0 1px var(--line);
   border-left-color:var(--accent);color:var(--ink);font-weight:700;}
-.weekItem .d{color:var(--faint);font-size:10.5px;font-weight:400;margin-top:2px;}
-.weekItem.blank{color:var(--sub);}
+.weekItem .d{color:var(--faint);font-size:10.5px;font-weight:400;margin-top:3px;letter-spacing:.02em;}
+.weekItem.blank{color:var(--faint);}
 .weekItem.blank .d{color:var(--ghost);}
-.weekDel{position:absolute;top:6px;right:4px;border:none;background:none;color:var(--faint);
+.weekDel{position:absolute;top:7px;right:4px;border:none;background:none;color:var(--faint);
   font-size:11px;height:22px;width:22px;padding:0;border-radius:6px;visibility:hidden;}
 .weekItem:hover .weekDel{visibility:visible;}
 .weekDel:hover{background:var(--accentWash);color:var(--accent);}
 .sidebar .empty{font-size:12px;color:var(--faint);padding:10px;}
-.sidebarFoot{flex:none;border-top:1px solid var(--line);padding:10px;display:flex;flex-direction:column;gap:2px;}
-.sidebarFoot button{border:none;background:transparent;text-align:left;height:36px;padding:0 10px;border-radius:8px;font-size:12px;}
-.sidebarFoot button:hover{background:#efe9dd;}
+.sidebarFoot{flex:none;border-top:1px solid var(--line2);padding:10px 12px;display:flex;flex-direction:column;gap:2px;}
+.sidebarFoot button{border:none;background:transparent;text-align:left;height:36px;padding:0 10px;
+  border-radius:8px;font-size:12px;justify-content:flex-start;gap:9px;}
+.sidebarFoot button:hover{background:var(--wash);color:var(--ink2);}
 
 .mainWrap{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;}
-.main{flex:1;padding:20px 22px;overflow:auto;min-height:0;}
-.noWeek{max-width:460px;margin:70px auto;text-align:center;color:var(--sub);font-size:13px;line-height:1.8;}
+.main{flex:1;padding:18px 22px 20px;overflow:auto;min-height:0;}
+.noWeek{max-width:460px;margin:70px auto;text-align:center;color:var(--sub);font-size:13px;line-height:1.9;}
 .noWeek .hint{margin-top:10px;}
 
 /* ---------- week grid ---------- */
-.grid{display:grid;border:1px solid #e0d7c4;border-radius:12px;overflow:hidden;background:var(--panel);
-  min-width:900px;}
-.grid .corner{background:var(--wash);border-right:1px solid var(--line);border-bottom:1px solid #e0d7c4;
-  display:flex;align-items:center;justify-content:center;font-size:9.5px;color:var(--faint);letter-spacing:.08em;}
-.dayhead{background:var(--wash);border-right:1px solid var(--line);border-bottom:1px solid #e0d7c4;padding:9px 11px 8px;}
-.dayhead .dt{font-family:var(--serif);font-size:14px;font-weight:700;}
-.dayhead .wd{font-size:11.5px;font-weight:500;color:#57503f;margin-left:5px;}
-.dayhead .ev{font-size:10.5px;color:var(--accent);white-space:pre-line;margin-top:4px;min-height:14px;line-height:1.5;}
-.dayTaskBanner{font-size:10.5px;color:var(--task);background:var(--taskWash);border-radius:6px;
-  padding:4px 6px;margin-top:5px;line-height:1.55;}
-.periodhead{background:var(--paper);border-right:1px solid var(--line);border-bottom:1px solid var(--line2);
-  display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;font-weight:700;color:#57503f;}
-.cell{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:8px 10px;
-  display:flex;flex-direction:column;gap:5px;min-height:116px;}
+.grid{display:grid;border:1px solid var(--line);border-radius:12px;overflow:hidden;overflow:clip;background:var(--panel);
+  min-width:900px;box-shadow:0 1px 2px rgba(60,52,38,.04),0 12px 28px -22px rgba(60,52,38,.32);}
+.grid .corner{background:var(--wash2);border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:10.5px;color:var(--faint);letter-spacing:.14em;}
+.dayhead{background:var(--wash2);border-right:1px solid var(--line2);border-bottom:1px solid var(--line);padding:11px 13px 10px;}
+.dayhead .dt{font-family:var(--serif);font-size:15px;font-weight:700;letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;}
+.dayhead .dtS{display:none;}
+.dayhead .wd{font-size:11.5px;font-weight:500;color:var(--sub);margin-left:6px;}
+.dayhead .ev{font-size:11px;color:var(--accent);white-space:pre-line;margin-top:5px;min-height:15px;line-height:1.5;}
+.dayTaskBanner{display:flex;align-items:flex-start;gap:6px;font-size:10.5px;color:var(--task);
+  background:var(--taskWash);border-radius:6px;padding:4px 7px;margin-top:6px;line-height:1.55;}
+.dayTaskBanner .ico{margin-top:2px;}
+.periodhead{background:var(--wash2);border-right:1px solid var(--line);border-bottom:1px solid var(--line2);
+  display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;
+  font-weight:700;color:var(--sub);}
+.cell{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:11px 12px 10px;
+  display:flex;flex-direction:column;gap:6px;min-height:116px;}
 .cell.off{background:transparent;}
-.cell.off:hover{background:var(--paper);}
-.badge{display:flex;align-items:center;gap:6px;min-height:22px;}
-.badge input,.badge select{background:transparent;border:none;border-radius:5px;padding:2px 4px;min-width:0;width:auto;
+.cell.off:hover{background:var(--wash2);}
+.badge{display:flex;align-items:center;gap:8px;min-height:24px;}
+.badge input,.badge select{background:transparent;border:none;border-radius:5px;padding:2px 4px;min-width:0;width:auto;max-width:100%;
+  text-overflow:ellipsis;
   appearance:none;-webkit-appearance:none;font-family:inherit;}
-.badge .clsInput{flex:0 0 30%;font-size:10px;font-weight:700;text-align:center;
-  background:var(--panel);color:#6b5b3a;letter-spacing:.03em;}
-.badge .subjInput{flex:1;font-size:13px;font-weight:700;letter-spacing:.02em;}
+.badge .clsInput{flex:0 0 30%;font-size:10.5px;font-weight:700;text-align:center;
+  background:var(--wash);color:var(--sub);letter-spacing:.04em;}
+.badge .subjInput{flex:1;font-size:14.5px;font-weight:700;letter-spacing:.03em;color:var(--ink);}
 .badge input::placeholder{color:var(--ghost);font-weight:400;}
-.badge input:hover,.badge select:hover{background:rgba(255,255,255,.6);}
+.badge input:hover,.badge select:hover{background:rgba(255,255,255,.65);}
 .badge input:focus,.badge select:focus{background:#fff;box-shadow:0 0 0 1.5px var(--accentLine);}
 .cell.off .badge .clsInput{background:transparent;}
-.taskChip{font-size:9.5px;font-weight:700;background:var(--taskWash);color:var(--task);
-  border-radius:5px;padding:3px 6px;line-height:1.4;align-self:flex-start;}
-.taskChip.done{background:#e9f0e6;color:#5f7a5f;text-decoration:line-through;}
-.cell textarea{flex:1;width:100%;border:none;background:transparent;font-size:11px;
-  min-height:52px;line-height:1.6;color:var(--ink2);padding:2px 3px;border-radius:6px;}
+.taskChip{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;
+  background:var(--taskWash);color:var(--task);border-radius:5px;padding:3px 7px;line-height:1.4;align-self:flex-start;}
+.taskChip.done{background:#eaf0e8;color:var(--ok);text-decoration:line-through;}
+.cell textarea{flex:1;width:100%;border:none;background:transparent;font-size:11.5px;
+  min-height:52px;line-height:1.7;color:var(--ink2);padding:2px 3px;border-radius:6px;}
 .cell textarea::placeholder{color:var(--ghost);}
-.cell textarea:hover{background:rgba(255,255,255,.5);}
+.cell textarea:hover{background:rgba(255,255,255,.55);}
 .cell textarea:focus{background:#fff;box-shadow:0 0 0 1.5px var(--accentLine);}
-.footlabel{display:flex;align-items:center;justify-content:center;background:var(--wash);
-  border-right:1px solid var(--line);font-size:9.5px;color:var(--faint);letter-spacing:.1em;
+.footlabel{display:flex;align-items:center;justify-content:center;background:var(--wash2);
+  border-right:1px solid var(--line);font-size:10.5px;color:var(--faint);letter-spacing:.2em;
   writing-mode:vertical-rl;padding:8px 0;}
-.dayfoot{border-right:1px solid var(--line2);background:var(--paper);padding:6px 8px;}
-.dayfoot textarea{width:100%;font-size:10.5px;min-height:44px;border:none;background:transparent;color:var(--ink2);}
+.dayfoot{border-right:1px solid var(--line2);background:var(--wash2);padding:9px 12px;}
+.dayfoot textarea{width:100%;font-size:11px;min-height:44px;border:none;background:transparent;color:var(--ink2);}
 .dayfoot textarea::placeholder{color:var(--ghost);}
 .dayfoot textarea:focus{background:#fff;box-shadow:0 0 0 1.5px var(--accentLine);border-radius:6px;}
 .grid .corner,.grid .periodhead,.grid .footlabel{position:sticky;left:0;z-index:6;}
 
 .msgbar{margin:12px 0 0;padding:11px 13px;background:var(--accentWash);border:1px solid var(--accentLine);
-  border-radius:10px;font-size:11.5px;color:#8d3f28;white-space:pre-line;line-height:1.6;}
+  border-radius:10px;font-size:11.5px;color:#8d3f28;white-space:pre-line;line-height:1.7;}
 
-/* ---------- 教科の塗り分け ---------- */
-.cell.s-国語{background:#f4e6e3;box-shadow:inset 3px 0 0 #c08a80;}
-.cell.s-社会{background:#f6ecd9;box-shadow:inset 3px 0 0 #c2a464;}
-.cell.s-数学{background:#e4ecf1;box-shadow:inset 3px 0 0 #7d9db0;}
-.cell.s-理科{background:#e5efe7;box-shadow:inset 3px 0 0 #7fa389;}
-.cell.s-音楽{background:#efe8f2;box-shadow:inset 3px 0 0 #a18cb0;}
-.cell.s-美術{background:#f6e6ee;box-shadow:inset 3px 0 0 #c08aa8;}
-.cell.s-保体{background:#e2f0ee;box-shadow:inset 3px 0 0 #7fa8a2;}
-.cell.s-技術{background:#efe9db;box-shadow:inset 3px 0 0 #b39a6b;}
-.cell.s-家庭{background:#f6ead9;box-shadow:inset 3px 0 0 #c49a72;}
-.cell.s-英語{background:#e8e9f3;box-shadow:inset 3px 0 0 #8d92b8;}
-.cell.s-道徳{background:#ecebe8;box-shadow:inset 3px 0 0 #a6a29a;}
-.cell.s-総合{background:#eef0e4;box-shadow:inset 3px 0 0 #9aa77e;}
-.cell.s-学活{background:#f3ece2;box-shadow:inset 3px 0 0 #bfa389;}
-.cell.s-自立{background:#e9f0e4;box-shadow:inset 3px 0 0 #94a882;}
-.cell.s-作業{background:#eee9f0;box-shadow:inset 3px 0 0 #a596ab;}
-.cell.s-生単{background:#f2ecdd;box-shadow:inset 3px 0 0 #b8a882;}
+/* ---------- 教科の見分け ----------
+   面で塗らず、左3pxの罫と教科名の文字色で示す（週の表が読みやすくなる） */
+.cell.s-国語{box-shadow:inset 3px 0 0 #c08a80;} .badge.s-国語 .subjInput{color:#7d3b31;}
+.cell.s-社会{box-shadow:inset 3px 0 0 #c2a464;} .badge.s-社会 .subjInput{color:#6d5522;}
+.cell.s-数学{box-shadow:inset 3px 0 0 #7d9db0;} .badge.s-数学 .subjInput{color:#31556b;}
+.cell.s-理科{box-shadow:inset 3px 0 0 #7fa389;} .badge.s-理科 .subjInput{color:#33604a;}
+.cell.s-音楽{box-shadow:inset 3px 0 0 #a18cb0;} .badge.s-音楽 .subjInput{color:#4f3d5e;}
+.cell.s-美術{box-shadow:inset 3px 0 0 #c08aa8;} .badge.s-美術 .subjInput{color:#75395a;}
+.cell.s-保体{box-shadow:inset 3px 0 0 #7fa8a2;} .badge.s-保体 .subjInput{color:#2f5b56;}
+.cell.s-技術{box-shadow:inset 3px 0 0 #b39a6b;} .badge.s-技術 .subjInput{color:#665128;}
+.cell.s-家庭{box-shadow:inset 3px 0 0 #c49a72;} .badge.s-家庭 .subjInput{color:#75492a;}
+.cell.s-英語{box-shadow:inset 3px 0 0 #8d92b8;} .badge.s-英語 .subjInput{color:#3f4478;}
+.cell.s-道徳{box-shadow:inset 3px 0 0 #a6a29a;} .badge.s-道徳 .subjInput{color:#55514a;}
+.cell.s-総合{box-shadow:inset 3px 0 0 #9aa77e;} .badge.s-総合 .subjInput{color:#4d5730;}
+.cell.s-学活{box-shadow:inset 3px 0 0 #bfa389;} .badge.s-学活 .subjInput{color:#6f5540;}
+.cell.s-自立{box-shadow:inset 3px 0 0 #94a882;} .badge.s-自立 .subjInput{color:#48583a;}
+.cell.s-作業{box-shadow:inset 3px 0 0 #a596ab;} .badge.s-作業 .subjInput{color:#4f4356;}
+.cell.s-生単{box-shadow:inset 3px 0 0 #b8a882;} .badge.s-生単 .subjInput{color:#665737;}
+
+/* 「今日」は面と天の金罫で示す（教科の罫と喧嘩しない） */
+.dayhead.todayCol{background:#fbf7ec;box-shadow:inset 0 2px 0 var(--gold);}
+.cell.todayCol{background:#fffdf3;}
 
 /* ---------- 休日（初期設定で登録した日） ---------- */
 .dayhead.holidayDay{background:var(--accentWash);}
 .dayhead.holidayDay .dt,.dayhead.holidayDay .wd{color:#8d3f28;}
 .cell.holidayDay{background:var(--accentWash)!important;box-shadow:inset 3px 0 0 var(--accent)!important;}
-.cell.holidayDay.off:hover{background:#f8e6df!important;}
+.cell.holidayDay.off:hover{background:#f7e4dc!important;}
 
 /* ---------- modal ---------- */
-.overlay{position:fixed;inset:0;background:rgba(40,32,24,.42);display:flex;align-items:center;
+.overlay{position:fixed;inset:0;background:rgba(40,32,24,.40);display:flex;align-items:center;
   justify-content:center;z-index:100;padding:24px;backdrop-filter:blur(2px);}
-.modal{background:var(--panel);border:1px solid #d5cdbe;border-radius:14px;max-width:1000px;width:100%;
-  max-height:90vh;overflow:auto;padding:22px 26px 24px;box-shadow:0 30px 70px -30px rgba(48,40,28,.55);}
-.modal h2{font-family:var(--serif);font-size:19px;font-weight:700;letter-spacing:.03em;color:var(--ink);
-  margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--line2);}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:14px;max-width:1000px;width:100%;
+  max-height:90vh;overflow:auto;padding:22px 26px 24px;box-shadow:0 34px 70px -34px rgba(48,40,28,.6);}
+.modal h2{font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:.08em;color:var(--ink);
+  margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--goldLine);
+  display:flex;align-items:center;gap:10px;}
+.modal h2 .ico{width:19px;height:19px;color:var(--gold);}
 .modalRow{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
 .modalActions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px;}
 .warnBox{background:var(--accentWash);border:1px solid var(--accentLine);color:#8d3f28;
-  font-size:11.5px;border-radius:10px;padding:11px 13px;margin-bottom:12px;line-height:1.6;}
+  font-size:11.5px;border-radius:10px;padding:11px 13px;margin-bottom:12px;line-height:1.7;}
 .fld{font-size:11.5px;color:var(--sub);line-height:2;}
 .fld input[type=checkbox]{margin-right:3px;}
 .fld label{margin-right:12px;font-size:12.5px;color:var(--ink);}
@@ -203,61 +236,66 @@ textarea{resize:vertical;line-height:1.6;}
 .previewTable{border-collapse:separate;border-spacing:0;width:100%;font-size:11.5px;margin-top:10px;
   border:1px solid var(--line);border-radius:10px;overflow:hidden;}
 .previewTable th,.previewTable td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2);padding:6px 4px;text-align:center;}
-.previewTable th{background:var(--wash);color:#7b7365;font-weight:500;font-size:10.5px;}
+.previewTable th{background:var(--wash2);color:var(--sub);font-weight:500;font-size:10.5px;}
 .previewTable input{width:100%;font-size:11px;border:none;text-align:center;background:transparent;padding:2px;}
 .previewTable input:focus{background:#fff;box-shadow:0 0 0 1.5px var(--accentLine);border-radius:5px;}
 
 .progTable{border-collapse:separate;border-spacing:0;width:100%;font-size:12px;
   border:1px solid var(--line);border-radius:10px;overflow:hidden;}
 .progTable th,.progTable td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2);padding:9px 10px;text-align:center;}
-.progTable th{background:var(--wash);color:#7b7365;font-weight:500;font-size:10.5px;letter-spacing:.04em;}
-.progTable td.subj{text-align:left;font-weight:700;}
-.progbar{background:#f1ece1;border-radius:4px;height:7px;overflow:hidden;width:100%;min-width:90px;}
-.progbar>div{background:#b39a6b;height:100%;border-radius:4px;}
-.progNote{font-size:10.5px;color:var(--faint);text-align:right;margin-top:8px;line-height:1.6;}
+.progTable th{background:var(--wash2);color:var(--sub);font-weight:500;font-size:10.5px;letter-spacing:.06em;}
+.progTable td{font-variant-numeric:tabular-nums;}
+.progTable td.subj{text-align:left;font-weight:700;font-variant-numeric:normal;}
+.progbar{background:var(--wash);border-radius:4px;height:7px;overflow:hidden;width:100%;min-width:90px;}
+.progbar>div{background:var(--gold);height:100%;border-radius:4px;}
+.progNote{font-size:11px;color:var(--faint);text-align:right;margin-top:8px;line-height:1.7;}
 
-.taskTable{border-collapse:separate;border-spacing:0;width:100%;font-size:12px;
+.taskTable{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px;
   border:1px solid var(--line);border-radius:10px;overflow:hidden;}
-.taskTable th,.taskTable td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2);padding:8px 10px;text-align:left;}
-.taskTable th{background:var(--wash);color:#7b7365;font-weight:500;font-size:10.5px;letter-spacing:.04em;}
-.taskStatus{border-radius:7px;padding:4px 7px;font-size:11px;border:1px solid var(--line);background:#fff;}
-.taskStatus.done{background:#e9f0e6;color:#5f7a5f;border-color:#d8e4d6;}
-.taskRow.done td{color:var(--ghost);text-decoration:line-through;}
-.taskDel{color:var(--accent);cursor:pointer;background:none;border:none;font-size:13px;height:auto;padding:0;}
-.taskDel:hover{background:none;}
-.taskGrade{height:26px;padding:0 8px;font-size:11px;margin-right:8px;}
-.taskGrade.on{border-color:#c9b98e;background:#f6efdd;color:#6b5a2e;}
-.taskNotice{height:26px;padding:0 8px;font-size:11px;margin-right:6px;}
-.taskNotice:hover{border-color:#cfc5b1;background:var(--wash2);}
+.taskTable th,.taskTable td{border-bottom:1px solid var(--line2);padding:9px 11px;text-align:left;vertical-align:middle;}
+.taskTable tr:last-child td{border-bottom:none;}
+.taskTable th{background:var(--wash2);color:var(--sub);font-weight:500;font-size:10.5px;letter-spacing:.1em;
+  border-bottom:1px solid var(--line);}
+.taskStatus{border-radius:999px;padding:4px 11px;font-size:11.5px;border:1px solid var(--line);
+  background:var(--panel);color:var(--sub);height:26px;}
+.taskStatus.done{background:#eff3ee;color:var(--ok);border-color:#d5e0d3;}
+.taskRow.done td{color:var(--ghost);}
+.taskRow.done td.taskDateCell b{color:var(--ghost);}
+.taskDel{color:var(--ghost);cursor:pointer;background:none;border:none;height:27px;padding:0 6px;}
+.taskDel:hover{background:var(--accentWash);color:var(--accent);border-color:transparent;}
+.taskGrade,.taskNotice,.taskQr{height:27px;padding:0 10px;font-size:11.5px;margin-left:5px;border-radius:7px;}
+.taskGrade.on,.taskQr.on{border-color:var(--goldLine);background:var(--goldWash);color:#6b5423;font-weight:600;}
+.taskNotice:hover,.taskQr:hover{border-color:#cdc3ad;background:var(--wash2);}
 .taskPick{cursor:pointer;}
 .taskDateCell{white-space:nowrap;}
-.taskDateCell b{font-size:12.5px;font-weight:700;}
-.taskDateCell .rel{display:block;font-size:10px;color:var(--faint);margin-top:1px;}
+.taskDateCell b{font-family:var(--serif);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em;}
+.taskDateCell .rel{display:block;font-size:10px;color:var(--faint);margin-top:2px;letter-spacing:.04em;}
 .taskDateCell .rel.soon{color:var(--accent);font-weight:700;}
 .taskDateCell .none{color:var(--ghost);font-weight:400;}
 
 /* ---- 小テスト・提出物 入力フォーム ---- */
-.taskForm{background:var(--wash);border:1px solid var(--line);border-radius:11px;padding:12px 14px;margin-bottom:12px;}
-.taskFormGrid{display:flex;flex-wrap:wrap;gap:11px 13px;align-items:flex-end;}
-.fld{display:flex;flex-direction:column;gap:4px;min-width:0;}
-.fld>label{font-size:10.5px;color:#7b7365;letter-spacing:.04em;white-space:nowrap;}
+.taskForm{background:var(--wash2);border:1px solid var(--line);border-radius:11px;padding:14px 16px 15px;margin-bottom:14px;}
+.taskFormGrid{display:flex;flex-wrap:wrap;gap:12px 14px;align-items:flex-end;}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.fld>label{font-size:10.5px;color:var(--faint);letter-spacing:.1em;white-space:nowrap;}
 .fld.grow{flex:1;min-width:190px;}
-.kindSeg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff;}
-.kindSeg button{border:none;border-radius:0;height:32px;padding:0 13px;font-size:12.5px;color:var(--sub);background:#fff;}
+.kindSeg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);}
+.kindSeg button{border:none;border-radius:0;height:32px;padding:0 14px;font-size:12.5px;color:var(--sub);background:var(--panel);}
 .kindSeg button+button{border-left:1px solid var(--line);}
 .kindSeg button:hover{background:var(--wash2);}
 .kindSeg button.on{font-weight:700;}
-.kindSeg button.on[data-kind="小テスト"]{background:#fdf0ec;color:#a33a2a;}
-.kindSeg button.on[data-kind="提出物"]{background:#eaf0f8;color:#2f5788;}
-.kindSeg button.on[data-kind="その他"]{background:#efece5;color:#5b5344;}
-.kindBadge{display:inline-block;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:700;white-space:nowrap;}
-.kindBadge.k-quiz{background:#fdf0ec;color:#a33a2a;border:1px solid #f0d6c9;}
-.kindBadge.k-sub{background:#eaf0f8;color:#2f5788;border:1px solid #d3e0f0;}
-.kindBadge.k-etc{background:#efece5;color:#5b5344;border:1px solid var(--line);}
-.taskFilters{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:9px;font-size:11.5px;color:var(--sub);}
-.taskFilters select{height:28px;padding:2px 7px;font-size:11.5px;}
-.taskFilters label{display:flex;align-items:center;gap:4px;}
-.taskCount{margin-left:auto;font-size:11px;color:var(--faint);}
+.kindSeg button.on[data-kind="小テスト"]{background:var(--accentWash);color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+.kindSeg button.on[data-kind="提出物"]{background:#eef2f8;color:#2f5788;box-shadow:inset 0 -2px 0 #2f5788;}
+.kindSeg button.on[data-kind="その他"]{background:var(--wash);color:var(--ink2);box-shadow:inset 0 -2px 0 var(--sub);}
+.kindBadge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 11px;
+  font-size:11px;font-weight:700;white-space:nowrap;}
+.kindBadge.k-quiz{background:var(--accentWash);color:var(--accent);border:1px solid var(--accentLine);}
+.kindBadge.k-sub{background:#eef2f8;color:#2f5788;border:1px solid #d3e0f0;}
+.kindBadge.k-etc{background:var(--wash2);color:var(--sub);border:1px solid var(--line);}
+.taskFilters{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:10px;font-size:12px;color:var(--sub);}
+.taskFilters select{height:29px;padding:2px 8px;font-size:12px;}
+.taskFilters label{display:flex;align-items:center;gap:5px;}
+.taskCount{margin-left:auto;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;}
 
 /* ---- 案内張り紙 ---- */
 .ntGrid{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;}
@@ -266,36 +304,37 @@ textarea{resize:vertical;line-height:1.6;}
 .ntNav{display:flex;align-items:center;gap:6px;}
 .ntNav select{flex:1;min-width:0;}
 .ntOpts{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;border-top:1px solid var(--line2);padding-top:11px;}
-.ntChk{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--sub);height:30px;}
+.ntChk{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--sub);height:30px;}
 .ntPrevWrap{flex:1;min-width:300px;}
-.ntStage{background:var(--wash);border:1px solid var(--line);border-radius:11px;padding:10px;overflow:hidden;}
+.ntStage{background:var(--wash2);border:1px solid var(--line);border-radius:11px;padding:10px;overflow:hidden;}
 .ntScaler{transform-origin:top left;}
 
-.searchHit{border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;cursor:pointer;background:#fff;}
-.searchHit:hover{border-color:#cfc5b1;background:var(--wash2);}
-.searchHit .meta{font-size:10.5px;color:var(--faint);margin-bottom:4px;}
-.searchHit .txt{font-size:12.5px;line-height:1.7;color:var(--ink2);}
-.searchHit mark{background:#f6e3bd;padding:0 2px;border-radius:3px;}
+.searchHit{border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;cursor:pointer;background:var(--panel);}
+.searchHit:hover{border-color:#cdc3ad;background:var(--wash2);}
+.searchHit .meta{font-size:10.5px;color:var(--faint);margin-bottom:4px;letter-spacing:.04em;}
+.searchHit .txt{font-size:12.5px;line-height:1.8;color:var(--ink2);}
+.searchHit mark{background:#f5e2bd;padding:0 2px;border-radius:3px;}
 
 /* ---------- 成績 ---------- */
-.gTabs{display:flex;gap:4px;border-bottom:1px solid var(--line2);margin-bottom:14px;flex-wrap:wrap;align-items:center;}
-.gTab{height:34px;padding:0 14px;border:1px solid transparent;border-bottom:none;background:transparent;
-  border-radius:8px 8px 0 0;color:var(--sub);font-size:12.5px;}
-.gTab:hover{background:var(--wash);}
-.gTab.on{background:var(--panel);border-color:var(--line);color:var(--ink);font-weight:600;box-shadow:0 1px 0 var(--panel);}
+.gTabs{display:flex;gap:26px;border-bottom:1px solid var(--line2);margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+.gTab{height:auto;padding:0 2px 11px;border:none;background:transparent;border-radius:0;
+  color:var(--faint);font-size:13px;letter-spacing:.06em;position:relative;}
+.gTab:hover{background:transparent;color:var(--sub);}
+.gTab.on{color:var(--ink);font-weight:700;background:transparent;}
+.gTab.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--btn);border-radius:2px;}
 .gPane{display:none;} .gPane.on{display:block;}
 /* ---- QR提出チェック ---- */
 .qrStat{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;}
-.qrStat .chip{background:var(--wash);border:1px solid var(--line2);border-radius:999px;
-  padding:3px 12px;font-size:12.5px;}
-.qrStat .chip b{font-size:15px;font-family:var(--serif);}
+.qrStat .chip{background:var(--wash2);border:1px solid var(--line);border-radius:999px;
+  padding:4px 13px;font-size:12.5px;color:var(--ink2);}
+.qrStat .chip b{font-size:16px;font-family:var(--serif);font-variant-numeric:tabular-nums;}
 .qrGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:7px;
   max-height:44vh;overflow:auto;padding:2px;}
 .qrCell{border:1px solid var(--line);border-radius:9px;padding:7px 5px;text-align:center;
   background:var(--panel);cursor:pointer;line-height:1.35;overflow:hidden;}
-.qrCell .no{font-family:var(--serif);font-size:15px;font-weight:700;}
+.qrCell .no{font-family:var(--serif);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;}
 .qrCell .nm{font-size:11px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.qrCell.done{background:#eff4ef;border-color:#cfe0cf;}
+.qrCell.done{background:#eff3ee;border-color:#cfe0cf;}
 .qrCell.done .no{color:var(--ok);}
 .qrCell.done::after{content:"\2713";display:block;font-size:11px;color:var(--ok);font-weight:700;}
 .qrRosterBox{text-align:center;padding:6px 0;}
@@ -319,77 +358,83 @@ textarea{resize:vertical;line-height:1.6;}
   display:flex;align-items:center;justify-content:center;}
 .qrPv .lb.cut{background:var(--accentWash);border-color:var(--accent);color:var(--accent);}
 .qrPv .safe{position:absolute;border:1px dashed var(--accent);pointer-events:none;}
-.qrPvCap{font-size:11.5px;color:var(--sub);text-align:center;margin-top:6px;line-height:1.6;}
+.qrPvCap{font-size:11.5px;color:var(--sub);text-align:center;margin-top:6px;line-height:1.7;}
 .qrRosterNav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:8px;}
-.qrNote{background:var(--wash);border:1px solid var(--line);border-radius:10px;
-  padding:9px 11px;font-size:12.5px;color:var(--ink2);line-height:1.7;margin:8px 0;}
-#storageAlert{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#b00020;color:#fff;
-  padding:10px 14px;font-size:13px;line-height:1.6;cursor:pointer;box-shadow:0 -2px 10px rgba(0,0,0,.25);}
-.gLocalNote{background:var(--wash);border:1px solid var(--line);border-radius:10px;
-  padding:9px 12px;font-size:11px;color:var(--sub);line-height:1.7;margin-bottom:14px;}
-.gLocalNote b{color:var(--ink2);}
+.qrNote{background:var(--wash2);border:1px solid var(--line);border-radius:10px;
+  padding:9px 12px;font-size:12.5px;color:var(--ink2);line-height:1.8;margin:8px 0;}
+#storageAlert{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#8f1b17;color:#fff;
+  padding:11px 14px;font-size:13px;line-height:1.7;cursor:pointer;box-shadow:0 -2px 10px rgba(0,0,0,.25);}
+.gLocalNote{display:flex;gap:10px;align-items:flex-start;background:var(--goldWash);
+  border:1px solid var(--goldLine);border-left:3px solid var(--gold);border-radius:9px;
+  padding:10px 13px;font-size:11.5px;color:var(--ink2);line-height:1.8;margin-bottom:14px;}
+.gLocalNote b{color:var(--ink);}
+.gLocalNote .ico{margin-top:2px;color:var(--gold);}
 .gRosterGrid{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;}
 .gRosterGrid textarea{width:100%;min-height:320px;font-size:12.5px;line-height:1.9;font-family:var(--sans);white-space:pre;}
-.gRosterList{border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12px;max-height:360px;overflow-y:auto;background:#fff;}
-.gRosterList div{display:flex;gap:8px;padding:5px 10px;border-bottom:1px solid var(--line2);}
+.gRosterList{border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12px;max-height:360px;overflow-y:auto;background:var(--panel);}
+.gRosterList div{display:flex;gap:8px;padding:6px 11px;border-bottom:1px solid var(--line2);}
 .gRosterList div:last-child{border-bottom:none;}
-.gRosterList .n{color:var(--faint);width:26px;text-align:right;flex:none;}
+.gRosterList .n{color:var(--faint);width:26px;text-align:right;flex:none;font-variant-numeric:tabular-nums;}
 .gRosterList .empty{color:var(--faint);justify-content:center;}
 .gCount{font-size:11px;color:var(--sub);margin-top:6px;}
-.gAssessForm{background:var(--wash);border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin-bottom:12px;}
+.gAssessForm{background:var(--wash2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px;}
 .gAssessForm .modalRow{margin-bottom:0;}
 .gAssessForm label.small{display:flex;align-items:center;gap:4px;}
-.gScoreStats{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink2);
-  background:var(--wash);border:1px solid var(--line);border-radius:9px;padding:8px 12px;margin-bottom:10px;}
-.gScoreStats b{color:var(--ink);font-weight:700;}
-.gScoreList{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:52vh;overflow-y:auto;background:#fff;}
-.gScoreRow{display:flex;align-items:center;gap:10px;padding:4px 12px;border-bottom:1px solid var(--line2);}
+.gScoreStats{display:flex;gap:0;flex-wrap:wrap;font-size:12px;color:var(--ink2);
+  background:var(--wash2);border:1px solid var(--line);border-radius:10px;padding:0;margin-bottom:10px;overflow:hidden;}
+.gScoreStats span{padding:9px 16px;border-right:1px solid var(--line2);}
+.gScoreStats span:last-child{border-right:none;}
+.gScoreStats b{color:var(--ink);font-weight:700;font-family:var(--serif);font-size:15px;
+  font-variant-numeric:tabular-nums;margin-left:4px;}
+.gScoreList{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:52vh;overflow-y:auto;background:var(--panel);}
+.gScoreRow{display:flex;align-items:center;gap:10px;padding:5px 12px;border-bottom:1px solid var(--line2);}
 .gScoreRow:last-child{border-bottom:none;}
-.gScoreRow .n{width:28px;text-align:right;color:var(--faint);font-size:12px;flex:none;}
+.gScoreRow .n{width:28px;text-align:right;color:var(--faint);font-size:12px;flex:none;font-variant-numeric:tabular-nums;}
 .gScoreRow .nm{flex:1;font-size:12.5px;}
-.gScoreRow input{width:88px;text-align:center;flex:none;}
-.gMxTable{border-collapse:separate;border-spacing:0;font-size:11.5px;border:1px solid var(--line);
+.gScoreRow input{width:88px;text-align:center;flex:none;font-variant-numeric:tabular-nums;}
+.gMxTable{border-collapse:separate;border-spacing:0;font-size:12px;border:1px solid var(--line);
   border-radius:10px;overflow:hidden;white-space:nowrap;}
-.gMxTable th,.gMxTable td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2);padding:5px 8px;text-align:center;}
-.gMxTable th{background:var(--wash);color:#7b7365;font-weight:500;font-size:10.5px;}
+.gMxTable th,.gMxTable td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2);padding:6px 9px;text-align:center;}
+.gMxTable th{background:var(--wash2);color:var(--sub);font-weight:500;font-size:10.5px;
+  border-bottom:1px solid var(--line);}
 .gMxTable td.nm{text-align:left;}
 .gMxTable td.num{font-variant-numeric:tabular-nums;}
-.gMxTable tr.foot td{background:var(--wash2);font-weight:600;color:var(--ink2);}
-.gMxTable .colTotal{background:var(--accentWash);}
-.gMxTable th .kindTag{display:inline-block;border-radius:4px;padding:0 4px;font-size:9px;
-  background:#fff;border:1px solid var(--line);color:#8a8172;margin-right:3px;}
-.gMxTable td.txt{color:var(--sub);}
+.gMxTable tr.foot td{background:var(--wash2);font-weight:600;color:var(--ink2);border-top:1px solid var(--line);}
+.gMxTable .colTotal{background:var(--goldWash);border-left:1px solid var(--goldLine);color:#6b5423;font-weight:700;}
+.gMxTable th .kindTag{display:inline-block;border-radius:4px;padding:0 5px;font-size:9.5px;
+  background:var(--panel);border:1px solid var(--line);color:var(--faint);margin-right:3px;}
+.gMxTable td.txt{color:var(--faint);}
 
 /* 成績モーダル：戻る導線・タブ説明・書き出し */
-.gBack{border:none;background:transparent;color:var(--sub);padding:0;height:26px;font-size:12px;}
-.gBack:hover{background:transparent;color:var(--accent);text-decoration:underline;border-color:transparent;}
+.gBack{border:none;background:transparent;color:var(--faint);padding:0;height:26px;font-size:12px;gap:6px;}
+.gBack:hover{background:transparent;color:var(--accent);border-color:transparent;}
 .gPaneHint{background:var(--wash2);border:1px solid var(--line2);border-radius:9px;
-  padding:8px 11px;font-size:11.5px;color:var(--sub);line-height:1.7;margin-bottom:12px;}
-.gMxBar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:10px;}
-.gMxBar select{height:28px;padding:2px 7px;font-size:11.5px;}
+  padding:9px 12px;font-size:11.5px;color:var(--sub);line-height:1.8;margin-bottom:12px;}
+.gMxBar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.gMxBar select{height:29px;padding:2px 8px;font-size:12px;}
 .gMxBar .small{white-space:nowrap;}
-.gExportRow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;
-  border-top:1px solid var(--line2);padding-top:10px;margin-bottom:12px;}
-.gExportRow button{height:28px;font-size:11.5px;padding:0 10px;}
+.gExportRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  border-top:1px solid var(--line2);padding-top:12px;margin-bottom:12px;}
+.gExportRow button{height:29px;font-size:12px;padding:0 11px;}
 #gMxCopyArea{width:100%;height:110px;font-family:ui-monospace,Consolas,"Courier New",monospace;
   font-size:10.5px;margin-bottom:10px;white-space:pre;}
 .gHist{display:flex;flex-direction:column;gap:4px;margin-top:8px;max-width:440px;}
-.gHistRow{display:flex;align-items:center;gap:8px;font-size:11px;}
+.gHistRow{display:flex;align-items:center;gap:8px;font-size:11.5px;}
 .gHistRow .lbl{width:66px;text-align:right;color:var(--sub);flex:none;font-variant-numeric:tabular-nums;}
-.gHistRow .bar{height:14px;background:#b39a6b;border-radius:3px;min-width:2px;flex:none;}
-.gHistRow .cnt{color:var(--ink2);}
+.gHistRow .bar{height:14px;background:var(--gold);border-radius:3px;min-width:2px;flex:none;}
+.gHistRow .cnt{color:var(--ink2);font-variant-numeric:tabular-nums;}
 .gcTable{border-collapse:separate;border-spacing:0;width:100%;font-size:12px;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
-.gcTable th,.gcTable td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2);padding:6px 9px;text-align:left;}
-.gcTable th{background:var(--wash);font-size:10.5px;color:#7b7365;font-weight:500;}
+.gcTable th,.gcTable td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2);padding:7px 10px;text-align:left;}
+.gcTable th{background:var(--wash2);font-size:10.5px;color:var(--sub);font-weight:500;}
 .gcTable td.g{text-align:center;font-variant-numeric:tabular-nums;}
 .gcTable tr.unmatched td{background:var(--accentWash);}
-.gcTable select{font-size:11.5px;padding:3px 6px;max-width:190px;}
+.gcTable select{font-size:12px;padding:3px 6px;max-width:190px;}
 .gcSummary{font-size:11.5px;color:var(--ink2);margin:10px 0;}
 @media (max-width:760px){ .gRosterGrid{grid-template-columns:1fr;} .gRosterGrid textarea{min-height:220px;} }
 
 @media (max-width:1180px){
   .topbar{gap:8px;padding:0 12px;}
-  .weeknav .wk{min-width:150px;font-size:13px;}
+  .weeknav .wk{min-width:150px;font-size:14px;}
   .searchWrap input{width:96px;}
   .teacherBox .small{display:none;}
   .syncDot{display:none;}
@@ -404,15 +449,21 @@ textarea{resize:vertical;line-height:1.6;}
 @media (max-width:760px){
   .hamburger{display:flex;align-items:center;justify-content:center;}
   .topbar{height:auto;min-height:56px;padding:0 8px;gap:6px;}
-  .brand .ttl{font-size:15px;}
+  .brand .ttl{font-size:16px;}
   .tbdiv,.teacherBox,.syncDot,.weeknav .wk{display:none;}
   .weeknav{display:none;}
-  .syncBtnLabel{display:none;} /* 画面が狭い時は☁アイコンだけにする */
-  .syncBtn{padding:0 8px;}
-  .searchWrap{height:34px;padding:0 9px;}
-  .searchWrap input{width:74px;}
-  .topbar .primary{padding:0 10px;font-size:11.5px;height:34px;}
-  .topbar button.icon{width:36px;height:36px;}
+  .syncBtnLabel{display:none;} /* 画面が狭い時は同期アイコンだけにする */
+  .syncBtn{padding:0 9px;}
+  .topbar{padding:6px 8px 6px;row-gap:4px;}
+  .topbar>.grow{display:none;}
+  .brand{margin-right:auto;}
+  .topbar .primary{order:1;padding:0 11px;font-size:11.5px;height:34px;}
+  .topbar .primary .lblL{display:none;}
+  .topbar .primary .lblS{display:inline;}
+  .searchWrap{order:2;flex:1 1 130px;min-width:0;height:36px;padding:0 10px;}
+  .searchWrap input{width:100%;min-width:0;}
+  .tbicons{order:3;}
+  .topbar button.icon{width:42px;height:42px;}
 
   .layout{position:relative;}
   .sidebar{position:fixed;top:0;bottom:0;left:0;width:80vw;max-width:300px;z-index:60;
@@ -422,51 +473,86 @@ textarea{resize:vertical;line-height:1.6;}
   .sidebarBackdrop{display:none;position:fixed;inset:0;background:rgba(40,32,24,.4);z-index:55;}
   .sidebarBackdrop.open{display:block;}
 
-  #mobileBar{display:flex;flex-direction:column;gap:10px;flex:none;
-    padding:10px 14px 12px;background:var(--panel);border-bottom:1px solid var(--line2);}
-  .mbTop{display:flex;align-items:center;gap:8px;}
-  .mbTop .mbWk{flex:1;text-align:center;font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.3;}
-  .mbTop .mbWk small{display:block;font-family:var(--sans);font-size:10.5px;font-weight:400;color:var(--faint);margin-top:2px;}
-  .mbTop button{width:40px;height:40px;border:none;background:transparent;border-radius:11px;padding:0;font-size:13px;}
+  #mobileBar{display:flex;flex-direction:column;gap:11px;flex:none;
+    padding:8px 12px 12px;background:var(--panel);border-bottom:1px solid var(--line2);}
+  .mbTop{display:flex;align-items:center;gap:6px;}
+  .mbTop .mbWk{flex:1;text-align:center;font-family:var(--serif);font-size:16px;font-weight:700;
+    line-height:1.25;letter-spacing:.03em;font-variant-numeric:tabular-nums;}
+  .mbTop .mbWk small{display:block;font-family:var(--sans);font-size:10.5px;font-weight:400;
+    color:var(--faint);letter-spacing:.1em;margin-top:3px;}
+  .mbTop button{width:44px;height:44px;border:none;background:transparent;border-radius:11px;padding:0;font-size:13px;}
   .mbSeg{display:flex;gap:4px;background:var(--wash);border-radius:11px;padding:3px;}
-  .mbSeg button{flex:1;height:36px;border:none;background:transparent;border-radius:9px;font-size:12px;color:#7b7365;padding:0;}
-  .mbSeg button.on{background:var(--panel);box-shadow:0 1px 2px rgba(60,52,38,.12);font-weight:700;color:var(--ink);}
-  .mbDays{display:flex;gap:4px;}
-  .mbDays button{flex:1;height:48px;border:none;background:transparent;border-radius:10px;padding:0;
-    font-size:11.5px;color:var(--sub);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
-  .mbDays button b{font-size:14px;font-weight:700;}
-  .mbDays button.on{background:var(--btn);color:#f2ebdc;}
+  .mbSeg button{flex:1;height:36px;border:none;background:transparent;border-radius:9px;font-size:12.5px;color:var(--sub);padding:0;}
+  .mbSeg button.on{background:var(--panel);box-shadow:0 1px 2px rgba(60,52,38,.14);font-weight:700;color:var(--ink);}
+  .mbDays{display:flex;gap:5px;}
+  .mbDays button{flex:1;height:52px;border:1px solid transparent;background:transparent;border-radius:11px;padding:0;
+    font-size:11px;color:var(--faint);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+  .mbDays button b{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink2);
+    font-variant-numeric:tabular-nums;}
+  .mbDays button.has{border-color:var(--line2);background:var(--wash2);}
+  .mbDays button.on{background:var(--btn);border-color:var(--btn);color:#cfc4ad;}
+  .mbDays button.on b{color:#f6efe1;}
   .mbDays.hide{display:none;}
 
   .main{padding:12px 12px 20px;}
   .grid{min-width:660px;border-radius:10px;}
-  .cell{min-height:96px;padding:7px 9px;}
+  .cell{min-height:96px;padding:9px 10px;}
   .cell textarea{min-height:40px;font-size:11px;}
-  .dayhead .dt{font-size:13px;}
+  .dayhead .dt{font-size:14px;}
 
   /* 1日ずつモード */
-  .grid.dayFocus{min-width:0;grid-template-columns:38px 1fr!important;}
+  .grid.dayFocus{min-width:0;grid-template-columns:40px minmax(0,1fr)!important;}
   .grid.dayFocus .hideCol{display:none;}
-  .grid.dayFocus .cell{min-height:132px;padding:11px 13px;}
-  .grid.dayFocus .badge .subjInput{font-size:15px;}
+  .grid.dayFocus .cell{min-height:132px;padding:13px 15px;}
+  .grid.dayFocus .badge .subjInput{font-size:17px;}
   .grid.dayFocus .badge .clsInput{flex:0 0 56px;font-size:11px;}
   .grid.dayFocus .cell textarea{font-size:13px;min-height:62px;}
-  .grid.dayFocus .dayhead{padding:11px 13px;}
-  .grid.dayFocus .dayfoot textarea{font-size:12px;}
+  .grid.dayFocus .dayhead{padding:12px 15px;}
+  .grid.dayFocus .dayhead .dt{font-size:19px;}
+  .grid.dayFocus .dayfoot textarea{font-size:12.5px;}
+
+  /* 週の俯瞰：1列を固定幅にして横スクロール。時限の列と日付の行は貼りつける */
+  .main.glance{padding:10px 0 20px 10px;}
+  .grid.weekGlance{min-width:0;width:calc(34px + var(--days,5) * 132px);border-radius:9px;margin-right:10px;
+    grid-template-columns:34px repeat(var(--days,5),minmax(0,1fr))!important;}
+  .grid.weekGlance .corner{position:sticky;top:0;left:0;z-index:8;font-size:0;}
+  .grid.weekGlance .dayhead{position:sticky;top:0;z-index:7;padding:7px 9px;}
+  .grid.weekGlance .dayhead .dt{display:none;}
+  .grid.weekGlance .dayhead .dtS{display:inline;font-family:var(--serif);font-size:15px;font-weight:700;
+    font-variant-numeric:tabular-nums;}
+  .grid.weekGlance .dayhead .wd{margin-left:4px;}
+  .grid.weekGlance .dayhead .ev{font-size:10px;min-height:0;margin-top:2px;
+    display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+  .grid.weekGlance .dayhead .ev:empty{display:none;}
+  .grid.weekGlance .dayTaskBanner{font-size:10px;padding:3px 5px;margin-top:4px;align-items:center;}
+  .grid.weekGlance .dayTaskBanner span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+  .grid.weekGlance .dayTaskBanner .ico{margin-top:0;}
+  .grid.weekGlance .periodhead{font-size:13px;}
+  .grid.weekGlance .cell{min-height:78px;padding:7px 8px;gap:4px;}
+  .grid.weekGlance .badge{flex-direction:column;align-items:stretch;gap:1px;min-height:0;}
+  .grid.weekGlance .badge .clsInput{flex:none;align-self:flex-start;font-size:10px;padding:1px 5px;}
+  .grid.weekGlance .badge .subjInput{flex:none;font-size:13.5px;padding:1px 3px;}
+  .grid.weekGlance .taskChip{font-size:9.5px;padding:2px 5px;max-width:100%;}
+  .grid.weekGlance .cell textarea{min-height:30px;font-size:10.5px;line-height:1.55;}
+  .grid.weekGlance .cell textarea::placeholder{color:transparent;}
+  .grid.weekGlance .footlabel{font-size:10px;}
+  .grid.weekGlance .dayfoot{padding:6px 8px;}
+  .grid.weekGlance .dayfoot textarea{min-height:34px;font-size:10.5px;}
 
   .modal{padding:16px 16px 18px;max-width:96vw!important;max-height:92vh;border-radius:12px;}
-  .modal h2{font-size:16px;}
-  .previewTable,.progTable,.taskTable{font-size:11px;}
+  .modal h2{font-size:17px;}
+  .previewTable,.progTable,.taskTable{font-size:11.5px;}
   .ntForm{flex:1 1 100%;}
   .ntPrevWrap{flex:1 1 100%;}
   .menu{right:-4px;min-width:210px;}
   .menu button,.menu a{height:44px;}
+  .gTabs{gap:18px;}
 }
 
 @media print{
   .topbar,.sidebar,.sidebarBackdrop,.msgbar,#mobileBar,button{display:none!important;}
   .main{padding:0;overflow:visible;}
-  .grid{border-radius:0;min-width:0;}
+  .grid{border-radius:0;min-width:0;box-shadow:none;}
   .cell textarea{border:1px solid #ddd;background:#fff;}
   .ntSheet{display:none!important;}
 }
@@ -474,13 +560,54 @@ textarea{resize:vertical;line-height:1.6;}
 <style id="ntSheetStyle"></style>
 </head>
 <body>
+<script>
+/* UIアイコン（線画SVG）。絵文字だと端末ごとに描画が変わるため自前で持つ。 */
+const ICON_PATHS = {
+  arrowL: "<path d=\"M19 12H5m0 0 6-6m-6 6 6 6\"/>",
+  arrowR: "<path d=\"M5 12h14m0 0-6-6m6 6-6 6\"/>",
+  bars: "<path d=\"M5 19V11m4.7 8V5m4.6 14v-6m4.7 6V8\"/>",
+  calendar: "<rect x=\"4\" y=\"5\" width=\"16\" height=\"15\" rx=\"2\"/><path d=\"M4 10h16M9 3v4M15 3v4\"/>",
+  cap: "<path d=\"m12 5 9 4-9 4-9-4 9-4\"/><path d=\"M7 11v4.2c0 1.6 2.2 2.8 5 2.8s5-1.2 5-2.8V11\"/>",
+  chart: "<path d=\"M4 20h16M6.5 20v-6m4 0v-8m4 8v-4m4 4V7\"/>",
+  check: "<path d=\"m5 13 4 4L19 7\"/>",
+  checkSquare: "<path d=\"M9 5h9a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1\"/><rect x=\"9\" y=\"3\" width=\"6\" height=\"4\" rx=\"1.2\"/><path d=\"m8.5 13 2.2 2.2 4.3-4.3\"/>",
+  chevronD: "<path d=\"m6 9 6 6 6-6\"/>",
+  chevronL: "<path d=\"m14 6-6 6 6 6\"/>",
+  chevronR: "<path d=\"m10 6 6 6-6 6\"/>",
+  clipboard: "<rect x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2\"/><rect x=\"9\" y=\"2.4\" width=\"6\" height=\"3.4\" rx=\"1\"/><path d=\"M8.5 12h7M8.5 16h4\"/>",
+  close: "<path d=\"M6 6l12 12M18 6 6 18\"/>",
+  cloud: "<path d=\"M6.5 18.5A4.5 4.5 0 0 1 6 9.6a6 6 0 0 1 11.6-1.4A4.2 4.2 0 0 1 18 18.5z\"/>",
+  doc: "<path d=\"M5 4h9l5 5v11H5z\"/><path d=\"M14 4v5h5\"/><path d=\"M8.5 13h7M8.5 16.5h4\"/>",
+  dots: "<circle cx=\"6\" cy=\"12\" r=\"1.3\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/><circle cx=\"18\" cy=\"12\" r=\"1.3\"/>",
+  download: "<path d=\"M12 4v10m0 0 4-4m-4 4-4-4M5 18h14\"/>",
+  expand: "<path d=\"M4 9V4h5M20 15v5h-5M4 15v5h5M20 9V4h-5\"/>",
+  gear: "<circle cx=\"12\" cy=\"12\" r=\"3.2\"/><path d=\"M12 4v2m0 12v2M4 12h2m12 0h2M6.3 6.3l1.4 1.4m8.6 8.6 1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4\"/>",
+  grid: "<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2.2\"/><path d=\"M4 10h16M10 10v10\"/>",
+  link: "<path d=\"M10.5 13.5a3.8 3.8 0 0 0 5.4 0l2.4-2.4a3.8 3.8 0 0 0-5.4-5.4l-1 1\"/><path d=\"M13.5 10.5a3.8 3.8 0 0 0-5.4 0l-2.4 2.4a3.8 3.8 0 0 0 5.4 5.4l1-1\"/>",
+  lock: "<rect x=\"5\" y=\"10\" width=\"14\" height=\"10\" rx=\"2\"/><path d=\"M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10\"/>",
+  mail: "<rect x=\"4\" y=\"6\" width=\"16\" height=\"12\" rx=\"2\"/><path d=\"m4 8 8 5 8-5\"/>",
+  menu: "<path d=\"M4 7h16M4 12h16M4 17h16\"/>",
+  minus: "<path d=\"M5 12h14\"/>",
+  plus: "<path d=\"M12 5v14M5 12h14\"/>",
+  printer: "<path d=\"M7 9V4h10v5\"/><rect x=\"4\" y=\"9\" width=\"16\" height=\"7\" rx=\"1.8\"/><path d=\"M7 14h10v6H7z\"/>",
+  qr: "<rect x=\"4\" y=\"4\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"13\" y=\"4\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"4\" y=\"13\" width=\"7\" height=\"7\" rx=\"1\"/><path d=\"M13 13h3v3h-3zM17 17h3v3h-3z\"/>",
+  refresh: "<path d=\"M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 5v3.5H16\"/>",
+  search: "<circle cx=\"11\" cy=\"11\" r=\"6.5\"/><path d=\"m16 16 4 4\"/>",
+  tag: "<path d=\"M4 11.5V5a1 1 0 0 1 1-1h6.5L20 12.5 12.5 20 4 11.5z\"/><circle cx=\"8\" cy=\"8\" r=\"1.3\"/>",
+  trash: "<path d=\"M5 7h14M10 7V5h4v2m-7 0 .8 12.1A1.9 1.9 0 0 0 9.7 21h4.6a1.9 1.9 0 0 0 1.9-1.9L17 7\"/>",
+};
+function ico(name, cls){
+  const p = ICON_PATHS[name] || "";
+  return '<svg class="ico' + (cls? " "+cls : "") + '" viewBox="0 0 24 24" aria-hidden="true">' + p + '</svg>';
+}
+</script>
 
 <div id="storageAlert" title="クリックで閉じます"></div>
 
 <div class="topbar">
-  <button id="btnSidebarToggle" class="icon hamburger" title="週一覧">☰</button>
+  <button id="btnSidebarToggle" class="icon hamburger" title="週一覧"><svg class="ico lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <div class="brand"><span class="mark">帳</span><span class="ttl">教務手帳</span></div>
-  <button id="btnSync" class="syncBtn" title="クラウド同期">☁ <span class="syncBtnLabel">ログイン</span></button>
+  <button id="btnSync" class="syncBtn" title="クラウド同期"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 18.5A4.5 4.5 0 0 1 6 9.6a6 6 0 0 1 11.6-1.4A4.2 4.2 0 0 1 18 18.5z"/></svg><span class="syncBtnLabel">ログイン</span></button>
   <div class="tbdiv"></div>
   <div class="teacherBox">
     <span class="small">先生</span>
@@ -488,35 +615,35 @@ textarea{resize:vertical;line-height:1.6;}
   </div>
   <div class="grow"></div>
   <div class="weeknav">
-    <button id="prevWk" class="icon" title="前の週">◀</button>
+    <button id="prevWk" class="icon" title="前の週"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
     <span class="wk" id="wkLabel">週を読み込んでください</span>
-    <button id="nextWk" class="icon" title="次の週">▶</button>
+    <button id="nextWk" class="icon" title="次の週"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
   </div>
   <div class="grow"></div>
-  <div class="searchWrap"><span class="mag">⌕</span><input id="searchBox" type="text" placeholder="メモを検索"></div>
+  <div class="searchWrap"><span class="mag"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></span><input id="searchBox" type="text" placeholder="メモを検索"></div>
   <div class="tbicons">
-    <button id="btnTasks" class="icon" title="小テスト・提出物">✓</button>
-    <button id="btnGrades" class="icon" title="成績（この端末のみ）">成</button>
-    <button id="btnProgress" class="icon" title="集計・進捗">▦</button>
-    <button id="btnPrint" class="icon" title="印刷">⎙</button>
+    <button id="btnTasks" class="icon" title="小テスト・提出物"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h9a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1"/><rect x="9" y="3" width="6" height="4" rx="1.2"/><path d="m8.5 13 2.2 2.2 4.3-4.3"/></svg></button>
+    <button id="btnGrades" class="icon" title="成績（この端末のみ）"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V11m4.7 8V5m4.6 14v-6m4.7 6V8"/></svg></button>
+    <button id="btnProgress" class="icon" title="集計・進捗"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.2"/><path d="M4 10h16M10 10v10"/></svg></button>
+    <button id="btnPrint" class="icon" title="印刷"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.8"/><path d="M7 14h10v6H7z"/></svg></button>
     <div class="menuWrap">
-      <button id="btnMore" class="icon" title="その他">⋯</button>
+      <button id="btnMore" class="icon" title="その他"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/></svg></button>
       <div class="menu" id="moreMenu">
-        <a id="btnSetup" href="setup.html">⚙ 初期設定</a>
-        <button id="btnExport">バックアップ書き出し</button>
-        <button id="btnImportJson">バックアップ読み込み</button>
+        <a id="btnSetup" href="setup.html"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 4v2m0 12v2M4 12h2m12 0h2M6.3 6.3l1.4 1.4m8.6 8.6 1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4"/></svg>初期設定</a>
+        <button id="btnExport"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 18h14"/></svg>バックアップ書き出し</button>
+        <button id="btnImportJson"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.4" width="6" height="3.4" rx="1"/><path d="M8.5 12h7M8.5 16h4"/></svg>バックアップ読み込み</button>
         <div class="menuDiv"></div>
-        <button id="btnGradesExport">成績バックアップ書き出し</button>
-        <button id="btnGradesImport">成績バックアップ読み込み</button>
+        <button id="btnGradesExport"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 18h14"/></svg>成績バックアップ書き出し</button>
+        <button id="btnGradesImport"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.4" width="6" height="3.4" rx="1"/><path d="M8.5 12h7M8.5 16h4"/></svg>成績バックアップ読み込み</button>
         <div class="menuDiv"></div>
-        <button id="btnFactoryReset" class="danger">🗑 全データを消去（テスト用）</button>
+        <button id="btnFactoryReset" class="danger"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2m-7 0 .8 12.1A1.9 1.9 0 0 0 9.7 21h4.6a1.9 1.9 0 0 0 1.9-1.9L17 7"/></svg>全データを消去（テスト用）</button>
       </div>
     </div>
   </div>
   <input type="file" id="pdfFile" accept="application/pdf" hidden>
   <input type="file" id="jsonFile" accept="application/json" hidden>
   <input type="file" id="gradesFile" accept="application/json" hidden>
-  <button class="primary" id="btnImport">時間割PDFを読み込む</button>
+  <button class="primary" id="btnImport"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 18h14"/></svg><span class="lblL">時間割PDFを読み込む</span><span class="lblS">PDF読込</span></button>
   <div class="syncDot" id="syncDot" style="display:none;"><i></i><span>同期済み</span></div>
 </div>
 
@@ -526,16 +653,16 @@ textarea{resize:vertical;line-height:1.6;}
     <div class="sidebarHead"><h3>週一覧</h3></div>
     <div id="weekList"><div class="empty">まだありません</div></div>
     <div class="sidebarFoot">
-      <button id="btnCalendar">＋　年間予定を準備</button>
-      <button id="btnBulkDelete">⌫　期間の週を削除</button>
+      <button id="btnCalendar"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>年間予定を準備</button>
+      <button id="btnBulkDelete"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>期間の週を削除</button>
     </div>
   </div>
   <div class="mainWrap">
     <div id="mobileBar">
       <div class="mbTop">
-        <button id="mbPrev">◀</button>
+        <button id="mbPrev"><svg class="ico lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
         <div class="mbWk" id="mbWk">週を読み込んでください<small id="mbWkSub"></small></div>
-        <button id="mbNext">▶</button>
+        <button id="mbNext"><svg class="ico lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
       </div>
       <div class="mbSeg">
         <button id="mbModeDay" class="on">1日ずつ</button>
@@ -573,7 +700,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- 集計・進捗モーダル -->
 <div class="overlay" id="progressModal" style="display:none;">
   <div class="modal">
-    <h2>📊 集計・進捗</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6.5 20v-6m4 0v-8m4 8v-4m4 4V7"/></svg>集計・進捗</h2>
     <div class="modalRow">
       <span class="small">年度</span>
       <select id="progressYear"></select>
@@ -587,15 +714,15 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- 小テスト・提出物モーダル -->
 <div class="overlay" id="taskModal" style="display:none;">
   <div class="modal">
-    <h2>✅ 小テスト・提出物</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h9a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1"/><rect x="9" y="3" width="6" height="4" rx="1.2"/><path d="m8.5 13 2.2 2.2 4.3-4.3"/></svg>小テスト・提出物</h2>
     <div class="taskForm">
       <div class="taskFormGrid">
         <div class="fld">
           <label>種類</label>
           <div class="kindSeg" id="taskKindSeg">
-            <button type="button" data-kind="小テスト" class="on">📝 小テスト</button>
-            <button type="button" data-kind="提出物">📮 提出物</button>
-            <button type="button" data-kind="その他">・ その他</button>
+            <button type="button" data-kind="小テスト" class="on"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5"/><path d="M8.5 13h7M8.5 16.5h4"/></svg>小テスト</button>
+            <button type="button" data-kind="提出物"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="m4 8 8 5 8-5"/></svg>提出物</button>
+            <button type="button" data-kind="その他">その他</button>
           </div>
         </div>
         <div class="fld">
@@ -620,15 +747,15 @@ textarea{resize:vertical;line-height:1.6;}
         <div class="fld">
           <label>&nbsp;</label>
           <div style="display:flex;gap:6px;">
-            <button class="primary" id="taskAdd">＋ 追加</button>
-            <button id="taskAddNotice" title="登録して、そのまま案内張り紙をつくります">＋ 追加して張り紙</button>
+            <button class="primary" id="taskAdd"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>追加</button>
+            <button id="taskAddNotice" title="登録して、そのまま案内張り紙をつくります"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.8"/><path d="M7 14h10v6H7z"/></svg>追加して張り紙</button>
           </div>
         </div>
       </div>
       <div class="hint" style="margin-top:8px;">クラスと教科を入れておくと、週の時間割の該当コマに表示され、案内張り紙もそのまま作れます。</div>
     </div>
     <div class="modalRow">
-      <button id="btnClassroomImport">🎓 Classroomから課題の期限を取り込む</button>
+      <button id="btnClassroomImport"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 5 9 4-9 4-9-4 9-4"/><path d="M7 11v4.2c0 1.6 2.2 2.8 5 2.8s5-1.2 5-2.8V11"/></svg>Classroomから課題の期限を取り込む</button>
       <span class="hint" id="classroomHint"></span>
     </div>
     <div class="taskFilters">
@@ -639,7 +766,7 @@ textarea{resize:vertical;line-height:1.6;}
       <select id="taskFilterCls"><option value="">すべてのクラス</option></select>
       <label><input type="checkbox" id="taskFilterTodo">未実施のみ</label>
       <label><input type="checkbox" id="taskFilterFuture">今日以降のみ</label>
-      <button id="taskNoticeBulk">🖨 選んだ分の張り紙をまとめて印刷</button>
+      <button id="taskNoticeBulk"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.8"/><path d="M7 14h10v6H7z"/></svg>選んだ分の張り紙をまとめて印刷</button>
       <span class="taskCount" id="taskCount"></span>
     </div>
     <div id="taskListWrap"></div>
@@ -650,7 +777,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- 案内張り紙モーダル -->
 <div class="overlay" id="noticeModal" style="display:none;">
   <div class="modal" style="max-width:1160px;">
-    <h2>🖨 案内張り紙（A4横）</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.8"/><path d="M7 14h10v6H7z"/></svg>案内張り紙（A4横）</h2>
     <div class="ntGrid">
       <div class="ntForm">
         <div class="ntNav">
@@ -695,7 +822,7 @@ textarea{resize:vertical;line-height:1.6;}
     </div>
     <div class="modalActions">
       <button id="ntClose">閉じる</button>
-      <button class="primary" id="ntPrintBtn">🖨 印刷する</button>
+      <button class="primary" id="ntPrintBtn"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.8"/><path d="M7 14h10v6H7z"/></svg>印刷する</button>
     </div>
   </div>
 </div>
@@ -703,7 +830,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- Classroom 課題取り込みモーダル -->
 <div class="overlay" id="classroomModal" style="display:none;">
   <div class="modal">
-    <h2>🎓 Classroomから課題を取り込む</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 5 9 4-9 4-9-4 9-4"/><path d="M7 11v4.2c0 1.6 2.2 2.8 5 2.8s5-1.2 5-2.8V11"/></svg>Classroomから課題を取り込む</h2>
     <div id="classroomWarn"></div>
     <div class="modalRow">
       <span class="small">クラス（コース）：</span>
@@ -721,7 +848,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- メモ検索モーダル -->
 <div class="overlay" id="searchModal" style="display:none;">
   <div class="modal">
-    <h2>🔍 メモ検索結果</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>メモ検索結果</h2>
     <div id="searchResultsWrap"></div>
     <div class="modalActions"><button id="searchClose">閉じる</button></div>
   </div>
@@ -730,10 +857,10 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- 年間予定 準備モーダル -->
 <div class="overlay" id="calendarModal" style="display:none;">
   <div class="modal" style="max-width:480px;">
-    <h2>🗓 年間予定を準備</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>年間予定を準備</h2>
     <div class="hint" style="margin-bottom:10px;">PDFを読み込む前に、この期間の週ページを空の状態で用意します。まだ授業が決まっていない週にも先に小テストの予定などを入れられるようになります。あとでPDFを読み込むと、既に用意した週にコマの内容だけが自動で書き込まれます（入力済みのメモは残ります）。</div>
     <div class="modalRow" id="calFromSettingsRow" style="display:none;flex-direction:column;align-items:stretch;gap:6px;background:var(--wash);padding:10px;border-radius:8px;">
-      <button id="calFromSettings">⚙ 初期設定の学期に沿って自動作成</button>
+      <button id="calFromSettings"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 4v2m0 12v2M4 12h2m12 0h2M6.3 6.3l1.4 1.4m8.6 8.6 1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4"/></svg>初期設定の学期に沿って自動作成</button>
       <span class="hint">下の時限数・曜日の設定を使い、初期設定で登録した学期ごとに一括で週を作成します。学期の間の休みは自動的に除外され、登録済みの休日はその日のメモ欄に反映されます。</span>
     </div>
     <div class="modalRow" style="flex-direction:column;align-items:stretch;gap:8px;">
@@ -759,7 +886,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- 期間の週をまとめて削除モーダル -->
 <div class="overlay" id="bulkDeleteModal" style="display:none;">
   <div class="modal" style="max-width:440px;">
-    <h2>🗑 期間の週をまとめて削除</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2m-7 0 .8 12.1A1.9 1.9 0 0 0 9.7 21h4.6a1.9 1.9 0 0 0 1.9-1.9L17 7"/></svg>期間の週をまとめて削除</h2>
     <div class="hint" style="margin-bottom:10px;">夏休み・冬休みなど、授業のない期間の週ページをまとめて削除します。</div>
     <div class="modalRow" style="flex-direction:column;align-items:stretch;gap:8px;">
       <label class="fld">開始日<br><input type="date" id="bdStart" style="width:100%;"></label>
@@ -776,7 +903,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- QR提出チェック：提出状況モーダル -->
 <div class="overlay" id="qrSubmitModal" style="display:none;">
   <div class="modal">
-    <h2>📱 QR提出チェック</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3h-3zM17 17h3v3h-3z"/></svg>QR提出チェック</h2>
     <div class="qrNote">
       クラウドに保存されるのは <b>クラス名・出席番号・提出した時刻だけ</b>です。生徒の氏名は送りません。
       スマホの「QR提出チェック」を同じGoogleアカウントで開くと、ここに出ている提出物が選べます。
@@ -798,7 +925,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- QR提出チェック：QRシール印刷モーダル -->
 <div class="overlay" id="qrStickerModal" style="display:none;">
   <div class="modal" style="max-width:680px;">
-    <h2>🏷 QRシール印刷</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5V5a1 1 0 0 1 1-1h6.5L20 12.5 12.5 20 4 11.5z"/><circle cx="8" cy="8" r="1.3"/></svg>QRシール印刷</h2>
     <div id="qrStkTitle" class="hint"></div>
     <div class="qrPrintGrid" style="margin-top:10px;">
       <div>
@@ -843,7 +970,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- QR提出チェック：名簿QR表示モーダル -->
 <div class="overlay" id="qrRosterModal" style="display:none;">
   <div class="modal" style="max-width:460px;">
-    <h2>📱 名簿QR</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3h-3zM17 17h3v3h-3z"/></svg>名簿QR</h2>
     <div class="qrNote">
       スマホの「QR提出チェック」→「名簿」タブ →「名簿QRを読み取る」で、この画面を読み取ってください。
       名簿はスマホの中にだけ保存され、クラウドには送られません。
@@ -851,10 +978,10 @@ textarea{resize:vertical;line-height:1.6;}
     <div class="qrRosterBox">
       <canvas id="qrRosterCanvas"></canvas>
       <div class="qrRosterNav">
-        <button id="qrRosterPrev">← 前</button>
+        <button id="qrRosterPrev"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>前</button>
         <span id="qrRosterPage" style="font-family:var(--serif);"></span>
-        <button id="qrRosterNext">次 →</button>
-        <button id="qrRosterBig" title="スマホで読みにくいときは大きくしてください">⛶ 大きく</button>
+        <button id="qrRosterNext">次<svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+        <button id="qrRosterBig" title="スマホで読みにくいときは大きくしてください"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 15v5h-5M4 15v5h5M20 9V4h-5"/></svg>大きく</button>
       </div>
       <div class="hint" id="qrRosterHint" style="margin-top:8px;"></div>
     </div>
@@ -867,11 +994,11 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- 成績モーダル -->
 <div class="overlay" id="gradesModal" style="display:none;">
   <div class="modal">
-    <button class="gBack" id="gBackToTasks" style="display:none;">← 小テスト・提出物にもどる</button>
-    <h2>📋 成績</h2>
+    <button class="gBack" id="gBackToTasks" style="display:none;"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>小テスト・提出物にもどる</button>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.4" width="6" height="3.4" rx="1"/><path d="M8.5 12h7M8.5 16h4"/></svg>成績</h2>
     <div class="gLocalNote">
-      <b>この端末にのみ保存されます。</b> 生徒の氏名・成績はクラウド同期の対象外で、別の端末には引き継がれません。
-      持ち出し・引き継ぎは「その他(⋯)」メニューの <b>成績バックアップ</b> から行えます（氏名を含むファイルの取り扱いに注意）。
+      <svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10"/></svg><div><b>この端末にのみ保存されます。</b> 生徒の氏名・成績はクラウド同期の対象外で、別の端末には引き継がれません。
+      持ち出し・引き継ぎは「その他(⋯)」メニューの <b>成績バックアップ</b> から行えます（氏名を含むファイルの取り扱いに注意）。</div>
     </div>
     <div class="gTabs">
       <button class="gTab on" data-gpane="roster">名簿</button>
@@ -900,8 +1027,8 @@ textarea{resize:vertical;line-height:1.6;}
           </div>
           <div class="modalRow" style="margin-top:10px;border-top:1px solid var(--line2);padding-top:10px;">
             <span class="small">QR提出チェック</span>
-            <button id="gStickerPrint" title="このクラス全員ぶんのQRシールを印刷します">🏷 QRシール印刷</button>
-            <button id="gRosterQr" title="スマホのQR提出チェックに名簿を渡します">📱 名簿QRを表示</button>
+            <button id="gStickerPrint" title="このクラス全員ぶんのQRシールを印刷します"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5V5a1 1 0 0 1 1-1h6.5L20 12.5 12.5 20 4 11.5z"/><circle cx="8" cy="8" r="1.3"/></svg>QRシール印刷</button>
+            <button id="gRosterQr" title="スマホのQR提出チェックに名簿を渡します"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3h-3zM17 17h3v3h-3z"/></svg>名簿QRを表示</button>
           </div>
         </div>
         <div>
@@ -917,8 +1044,8 @@ textarea{resize:vertical;line-height:1.6;}
         <select id="gScoreClass"></select>
         <span class="small">評価</span>
         <select id="gScoreAssessment" style="max-width:280px;"></select>
-        <button id="gScoreNew">＋ 新しい評価</button>
-        <button id="gcOpen">🎓 Classroomから点数</button>
+        <button id="gScoreNew"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新しい評価</button>
+        <button id="gcOpen"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 5 9 4-9 4-9-4 9-4"/><path d="M7 11v4.2c0 1.6 2.2 2.8 5 2.8s5-1.2 5-2.8V11"/></svg>Classroomから点数</button>
         <button id="gScoreEditMeta" style="display:none;">編集</button>
         <button id="gScoreDelete" style="display:none;color:var(--accent);">削除</button>
       </div>
@@ -956,13 +1083,13 @@ textarea{resize:vertical;line-height:1.6;}
           <option value="rate">得点率(%)</option>
         </select>
         <span style="flex:1;"></span>
-        <button id="gMxPrint">🖨 印刷</button>
+        <button id="gMxPrint"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.8"/><path d="M7 14h10v6H7z"/></svg>印刷</button>
       </div>
       <div class="gExportRow">
         <span class="small">書き出し</span>
-        <button id="gMxCopy">📋 この表をコピー</button>
-        <button id="gMxCsv">⬇ この表をCSV</button>
-        <button id="gMxCsvLong">⬇ 全クラス明細CSV</button>
+        <button id="gMxCopy"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.4" width="6" height="3.4" rx="1"/><path d="M8.5 12h7M8.5 16h4"/></svg>この表をコピー</button>
+        <button id="gMxCsv"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 18h14"/></svg>この表をCSV</button>
+        <button id="gMxCsvLong"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 18h14"/></svg>全クラス明細CSV</button>
         <span class="hint" id="gMxExportHint">コピーするとスプレッドシートやExcelにそのまま貼り付けられます（氏名を含みます）。</span>
       </div>
       <textarea id="gMxCopyArea" style="display:none;" spellcheck="false" readonly></textarea>
@@ -981,13 +1108,13 @@ textarea{resize:vertical;line-height:1.6;}
         <span class="small">生徒</span>
         <select id="gIvStudent" style="max-width:200px;"></select>
         <span style="flex:1;"></span>
-        <button id="gIvPrint">🖨 個人票を印刷</button>
+        <button id="gIvPrint"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.8"/><path d="M7 14h10v6H7z"/></svg>個人票を印刷</button>
       </div>
       <div id="gIvWrap"></div>
     </div>
 
     <div class="modalActions">
-      <button class="gBack" id="gBackToTasks2" style="display:none;margin-right:auto;">← 小テスト・提出物にもどる</button>
+      <button class="gBack" id="gBackToTasks2" style="display:none;margin-right:auto;"><svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>小テスト・提出物にもどる</button>
       <button id="gradesClose">閉じる</button>
     </div>
   </div>
@@ -996,7 +1123,7 @@ textarea{resize:vertical;line-height:1.6;}
 <!-- Classroom 点数取り込みモーダル -->
 <div class="overlay" id="gcImportModal" style="display:none;">
   <div class="modal" style="max-width:760px;">
-    <h2>🎓 Classroomから点数を取り込む</h2>
+    <h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 5 9 4-9 4-9-4 9-4"/><path d="M7 11v4.2c0 1.6 2.2 2.8 5 2.8s5-1.2 5-2.8V11"/></svg>Classroomから点数を取り込む</h2>
     <div id="gcWarn"></div>
     <div class="modalRow">
       <span class="small">取り込み先クラス</span><b id="gcTargetClass"></b>
@@ -2121,7 +2248,7 @@ function weekItemHtml(k){
   const label = w.days[0] && w.days[0].date ? `${w.days[0].date.slice(5).replace("-","/")}〜${(last&&last.date||"").slice(5).replace("-","/")}` : k;
   const sub = w.imported ? (w.teacherName||"") : "（未読み込み）";
   return `<div class="weekItem ${k===curWeek?"cur":""} ${w.imported?"":"blank"}" data-k="${escAttr(k)}">
-    <button class="weekDel" data-k="${escAttr(k)}" title="この週を削除">✕</button>
+    <button class="weekDel" data-k="${escAttr(k)}" title="この週を削除">${ico("close","sm")}</button>
     <div>${escHtml(label)}</div>
     <div class="d">${escHtml(sub)}</div>
   </div>`;
@@ -2146,7 +2273,7 @@ function renderWeekList(){
     const yearKeys = byYear.get(y);
     return `<div class="yearGroup">
       <button class="yearHead" data-y="${y}">
-        <span class="yearArrow">${isOpen?"▾":"▸"}</span>
+        <span class="yearArrow">${isOpen?ico("chevronD","sm"):ico("chevronR","sm")}</span>
         <span class="yearLabel">${y}年度${y===currentFiscalYear()?"（今年度）":""}</span>
         <span class="yearCount">${yearKeys.length}</span>
       </button>
@@ -2216,6 +2343,11 @@ function subjectOptionsHtml(current){
   return opts.join("");
 }
 
+// "2026-09-28" → "9/28"（形が違えばそのまま返す）
+function shortMD(iso){
+  const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso||"");
+  return m ? (+m[1])+"/"+(+m[2]) : (iso||"");
+}
 function renderWeek(){
   const main=document.getElementById("mainArea");
   const wkLabel=document.getElementById("wkLabel");
@@ -2257,23 +2389,24 @@ function renderWeek(){
   const holidaysByDate = {};
   ((DB.settings && DB.settings.holidays) || []).forEach(hd=>{ holidaysByDate[hd.date]=hd.label; });
 
+  const todayStr = todayIsoStr();
   const maxP = Math.max(1, ...w.days.map(d=>d.periods.length));
-  let h = `<div class="grid" style="grid-template-columns:44px repeat(${w.days.length},1fr);">`;
+  let h = `<div class="grid" style="grid-template-columns:44px repeat(${w.days.length},minmax(0,1fr));--days:${w.days.length};">`;
   h += `<div class="corner">時限</div>`;
   w.days.forEach((d,di)=>{
     const unmatched = dayTaskInfo[di].unmatched;
     const holidayLabel = holidaysByDate[d.date];
-    h += `<div class="dayhead ${holidayLabel?"holidayDay":""}">
-      <span class="dt">${escHtml(d.date||"")}</span><span class="wd">${escHtml(d.weekday||"")}</span>
+    h += `<div class="dayhead ${holidayLabel?"holidayDay":""} ${d.date===todayStr?"todayCol":""}">
+      <span class="dt">${escHtml(d.date||"")}</span><span class="dtS">${escHtml(shortMD(d.date))}</span><span class="wd">${escHtml(d.weekday||"")}</span>
       <div class="ev">${escHtml(d.events || holidayLabel || "")}</div>
-      ${unmatched.length? `<div class="dayTaskBanner">${unmatched.map(t=>`📝 ${escHtml(t.title)}`).join("<br>")}</div>` : ""}
+      ${unmatched.map(t=>`<div class="dayTaskBanner">${ico("doc","sm")}<span>${escHtml(t.title)}</span></div>`).join("")}
     </div>`;
   });
   for(let p=0;p<maxP;p++){
     h += `<div class="periodhead">${p+1}</div>`;
     w.days.forEach((d,di)=>{
       const cell = d.periods[p];
-      const holidayCls = holidaysByDate[d.date] ? " holidayDay" : "";
+      const holidayCls = (holidaysByDate[d.date] ? " holidayDay" : "") + (d.date===todayStr ? " todayCol" : "");
       if(!cell){ h+=`<div class="cell off${holidayCls}"></div>`; return; }
       const hasContent = cell.cls || cell.subject;
       const badgeCls = hasContent? subjectClass(cell.subject) : "";
@@ -2289,7 +2422,7 @@ function renderWeek(){
           ${clsField}
           ${subjField}
         </div>
-        ${chips.map(t=>`<div class="taskChip ${t.status==="実施済み"?"done":""}" title="${escAttr(t.type)}：${escAttr(t.title)}">📝 ${escHtml(t.title)}</div>`).join("")}
+        ${chips.map(t=>`<div class="taskChip ${t.status==="実施済み"?"done":""}" title="${escAttr(t.type)}：${escAttr(t.title)}">${ico("doc","sm")}${escHtml(t.title)}</div>`).join("")}
         <textarea data-day="${di}" data-p="${p}" placeholder="授業内容・進捗・メモ">${escHtml(cell.note||"")}</textarea>
       </div>`;
     });
@@ -2618,20 +2751,20 @@ function renderTasks(){
       <td><input type="checkbox" class="taskPick" data-id="${escAttr(t.id)}"></td>
       <td class="taskDateCell">${dp?`<b>${dp.m}/${dp.d}（${dp.wd}）</b>`:'<b class="none">日付なし</b>'}${taskRelHtml(t.date)}<span class="rel">${escHtml(taskDateWordShort(t.type))}</span></td>
       <td>${escHtml(t.cls)}</td><td>${escHtml(t.subject)}</td>
-      <td><span class="kindBadge ${taskKindClass(t.type)}">${escHtml(t.type||"その他")}</span>${isClassroom?' <span class="hint">🎓</span>':''}</td>
+      <td><span class="kindBadge ${taskKindClass(t.type)}">${escHtml(t.type||"その他")}</span>${isClassroom?' <span class="hint" title="Classroom">'+ico("cap","sm")+'</span>':''}</td>
       <td>${escHtml(t.title)}</td>
       <td><select class="taskStatus ${t.status==="実施済み"?"done":""}" data-id="${escAttr(t.id)}">
         <option ${t.status==="未実施"?"selected":""}>未実施</option>
         <option ${t.status==="実施済み"?"selected":""}>実施済み</option>
       </select></td>
       <td class="submitStatus" data-id="${escAttr(t.id)}">${isClassroom
-        ? (t.submitStatus? escHtml(t.submitStatus)+` <button class="btnCheckSubmit" data-id="${escAttr(t.id)}">↻</button>` : `<button class="btnCheckSubmit" data-id="${escAttr(t.id)}">確認</button>`)
+        ? (t.submitStatus? escHtml(t.submitStatus)+` <button class="btnCheckSubmit" data-id="${escAttr(t.id)}">${ico("refresh","sm")}</button>` : `<button class="btnCheckSubmit" data-id="${escAttr(t.id)}">確認</button>`)
         : '<span class="hint">－</span>'}</td>
       <td style="white-space:nowrap;">
-        <button class="taskNotice" data-id="${escAttr(t.id)}" title="この予定の案内張り紙をつくる">🖨 張り紙</button>
-        <button class="taskQr ${qrDone?"on":""}" data-id="${escAttr(t.id)}" title="QRシールで提出チェックする">${qrDone?"QR "+qrDone:"📱 QR"}</button>
-        <button class="taskGrade ${graded?"on":""}" data-id="${escAttr(t.id)}" title="この予定の得点を入力">${graded?"結果 ✓":"結果を入力"}</button>
-        <button class="taskDel" data-id="${escAttr(t.id)}">✕</button>
+        <button class="taskNotice" data-id="${escAttr(t.id)}" title="この予定の案内張り紙をつくる">${ico("printer","sm")}張り紙</button>
+        <button class="taskQr ${qrDone?"on":""}" data-id="${escAttr(t.id)}" title="QRシールで提出チェックする">${ico("qr","sm")}${qrDone||"QR"}</button>
+        <button class="taskGrade ${graded?"on":""}" data-id="${escAttr(t.id)}" title="この予定の得点を入力">${graded?ico("check","sm")+"結果":"結果を入力"}</button>
+        <button class="taskDel" data-id="${escAttr(t.id)}" title="削除">${ico("close","sm")}</button>
       </td>
     </tr>`;
   });
@@ -4010,7 +4143,7 @@ function gRenderIndiv(){
     } else {
       scoreCell=(raw==null||String(raw)==="") ? '<span class="hint">—</span>' : escHtml(String(raw));
     }
-    rows+=`<tr><td class="nm">${escHtml(a.subject? a.subject+" " : "")}${escHtml(a.name)}${a.taskId?' <span class="hint">🔗</span>':''}</td>`+
+    rows+=`<tr><td class="nm">${escHtml(a.subject? a.subject+" " : "")}${escHtml(a.name)}${a.taskId?' <span class="hint" title="小テスト・提出物と連携">'+ico("link","sm")+'</span>':''}</td>`+
       `<td>${a.date?escHtml(a.date.slice(5)):"–"}</td>`+
       `<td class="num">${scoreCell}</td><td class="num">${a.maxScore}</td>`+
       `<td class="num">${rateCell}</td><td class="num">${avgCell}</td>`+
@@ -4360,7 +4493,7 @@ function qrRosterFor(ses){
 /* ---- タスクから開く ---- */
 async function qrOpenForTask(task){
   if(!currentUser){
-    alert("QR提出チェックはクラウド同期を使います。\n右上の「☁ ログイン」からGoogleアカウントでログインしてください。");
+    alert("QR提出チェックはクラウド同期を使います。\n右上の「ログイン」からGoogleアカウントでログインしてください。");
     return;
   }
   let ses = qrSessionForTask(task.id);
@@ -4752,12 +4885,12 @@ function qrShowRosterPage(){
     (qrRosterPages.length>1
       ? "全部で "+qrRosterPages.length+" 枚あります。1枚読むとスマホが次を待つので「次 →」で送ってください。"
       : "スマホで読み取ると取り込みが終わります。")
-    + "　読みにくいときは「⛶ 大きく」を押し、画面の明るさを上げて 20〜30cm まで近づけてください。";
+    + "　読みにくいときは「大きく」を押し、画面の明るさを上げて 20〜30cm まで近づけてください。";
 }
 document.getElementById("qrRosterBig").onclick=()=>{
   const m=document.getElementById("qrRosterModal");
   m.classList.toggle("big");
-  document.getElementById("qrRosterBig").textContent = m.classList.contains("big") ? "⛶ 元にもどす" : "⛶ 大きく";
+  document.getElementById("qrRosterBig").innerHTML = ico("expand","sm") + (m.classList.contains("big") ? "元にもどす" : "大きく");
 };
 document.getElementById("gRosterQr").onclick=()=>{
   const cls=gCurClass;
@@ -4772,7 +4905,7 @@ document.getElementById("qrRosterNext").onclick=()=>{ if(qrRosterIdx<qrRosterPag
 document.getElementById("qrRosterClose").onclick=()=>{
   const m=document.getElementById("qrRosterModal");
   m.style.display="none"; m.classList.remove("big");
-  document.getElementById("qrRosterBig").textContent="⛶ 大きく";
+  document.getElementById("qrRosterBig").innerHTML=ico("expand","sm")+"大きく";
 };
 
 </script>
@@ -4829,10 +4962,11 @@ document.getElementById("qrRosterClose").onclick=()=>{
     dwrap.innerHTML = "";
     ds.forEach((d,i)=>{
       const b = document.createElement("button");
-      if(i===focusDay) b.className = "on";
-      const wd = document.createElement("span"); wd.textContent = d.weekday || "";
+      const hasLesson = (d.periods||[]).some(p=>p && (p.cls || p.subject));
+      b.className = (i===focusDay ? "on" : (hasLesson ? "has" : ""));
       const dt = document.createElement("b"); dt.textContent = (d.date||"").slice(8).replace(/^0/,"");
-      b.appendChild(wd); b.appendChild(dt);
+      const wd = document.createElement("span"); wd.textContent = d.weekday || "";
+      b.appendChild(dt); b.appendChild(wd);
       b.onclick = ()=>{ focusDay = i; paint(); };
       dwrap.appendChild(b);
     });
@@ -4841,6 +4975,9 @@ document.getElementById("qrRosterClose").onclick=()=>{
     labelColumns(grid);
     const focusOn = (mode==="day") && window.matchMedia("(max-width:760px)").matches;
     grid.classList.toggle("dayFocus", focusOn);
+    const glanceOn = (mode==="week") && window.matchMedia("(max-width:760px)").matches;
+    grid.classList.toggle("weekGlance", glanceOn);
+    document.getElementById("mainArea").classList.toggle("glance", glanceOn);
     grid.querySelectorAll("[data-col]").forEach(el=>{
       el.classList.toggle("hideCol", focusOn && +el.getAttribute("data-col") !== focusDay);
     });
